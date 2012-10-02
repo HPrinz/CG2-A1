@@ -111,6 +111,8 @@ define(["util", "scene"],
      * and adding them to the scene
      */
     SceneController.prototype.select = function(obj) {
+	
+		console.log("selecting an object");
     
         if(!obj) {
             throw new "SceneController.select(): no object provided";

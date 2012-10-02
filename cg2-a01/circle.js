@@ -1,3 +1,12 @@
+/*
+ * Hala Basali
+ * Hanna Prinz
+ *
+ * Module: circle
+ *
+ * ...
+ */
+
 /* requireJS module definition */
 define(["util", "vec2", "scene", "point_dragger"], 
        (function(Util,vec2,Scene,PointDragger) {
@@ -32,18 +41,18 @@ define(["util", "vec2", "scene", "point_dragger"],
     // draw this line into the provided 2D rendering context
     Circle.prototype.draw = function(context) {
 
-	
-		var center = this.center;
         // draw actual line
         context.beginPath();
         
         // set points to be drawn
      
-        context.arc(center[0], center[1], // position
+        context.arc(this.center[0], this.center[1], // position
                     this.radius,    // radius
                     0.0, Math.PI*2, // start and end angle
                     true); 
         // set drawing style
+		context.closePath();
+		
 		context.lineWidth = this.lineStyle.width;
         context.strokeStyle = this.lineStyle.color;
         context.fillStyle   = this.lineStyle.color;
@@ -54,30 +63,28 @@ define(["util", "vec2", "scene", "point_dragger"],
     };
 
     // test whether the mouse position is on this line segment
-    Circle.prototype.isHit = function(context,pos) {
-    
-        // what is my current position?
-        var center = this.getCenter();
+    Circle.prototype.isHit = function(context,mousePos) {
     
         // check whether distance between mouse and dragger's center
         // is at max (radius+1) 
-        var dx = mousePos[0] - center[0];
-        var dy = mousePos[1] - center[1];
-        var r = this.center + this.radius+2;
-        return (dx*dx + dy*dy) <= (r*2);           
+        var dx = mousePos[0] - this.center[0];
+        var dy = mousePos[1] - this.center[1];
+        return Math.sqrt(dx*dx + dy*dy) <= (this.radius+10);           
 
     };
-    
+	
     // return list of draggers to manipulate this line
     Circle.prototype.createDraggers = function() {
+	
+		console.log("Circle createDraggers");
     
         var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true }
         var draggers = [];
 		
         // create closure and callbacks for dragger
-        var center = this;
-        var getCenter = function() { return center; };
-        var setCenter = function(dragEvent) { center = dragEvent.position; };
+        var _circle = this;
+        var getCenter = function() { return _circle.center; };
+        var setCenter = function(dragEvent) { _circle.center = dragEvent.position; };
         draggers.push( new PointDragger(getCenter, setCenter, draggerStyle) );
         
         return draggers;
