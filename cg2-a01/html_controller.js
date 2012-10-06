@@ -32,6 +32,11 @@ define(["jquery", "straight_line", "circle"],
         var randomY = function() { 
             return Math.floor(Math.random()*(context.canvas.height-10))+5; 
         };
+		
+		// generate random Y coordinate within the canvas
+        var randomRadius = function() { 
+            return Math.floor((Math.random()*(context.canvas.width-10))/2)+5; 
+        };
             
         // generate random color in hex notation
         var randomColor = function() {
@@ -81,7 +86,9 @@ define(["jquery", "straight_line", "circle"],
                 color: randomColor()
             };
                         
-            var circle = new Circle( [randomX(),randomY()],randomX() , style);
+            var circle = new Circle( [randomX(),randomY()],
+									 randomRadius(),
+									 style);
                                         
             scene.addObjects([circle]);
 
