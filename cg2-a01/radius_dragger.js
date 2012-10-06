@@ -1,6 +1,8 @@
 /*
+ * Hala Basali
+ * Hanna Prinz
  *
- * Module: radius_dragger
+ * Module: radius_dragger (equal to point_dragger)
  *
  * A radiusDragger is a drawable object than can react to 
  * events from a SceneController. It will typically control
@@ -8,14 +10,13 @@
  *
  */
 
-
 /* requireJS module definition */
 define(["util", "scene"], 
        (function(Util,Scene) {
 
     "use strict";
 
-    /*
+    /**
      * A dragger is a visible handle to scale a circle's radius
      * using the 2D rendering features of the HTML5 canvas element. 
      * Parameters:
@@ -38,7 +39,6 @@ define(["util", "scene"],
      *        specification object for the drawing style, example see above 
      * 
      */
-
     var RadiusDragger = function(getPos, setPos, drawStyle) {
 
         // remember the callbacks
@@ -54,11 +54,10 @@ define(["util", "scene"],
         };
         
         // attribute queried by SceneController to recognize draggers
-        this.isDragger = true; 
-                                        
+        this.isDragger = true;             
     };
 
-    /*
+    /**
      * draw the dragger as a small circle
      */
     RadiusDragger.prototype.draw = function (context) {
@@ -86,8 +85,8 @@ define(["util", "scene"],
         context.stroke();
     };
 
-    /* 
-     * test whether the specified mouse position "hits" this dragger
+    /**
+     * Test whether the specified mouse position "hits" this dragger
      */
     RadiusDragger.prototype.isHit = function (context,mousePos) {
     
@@ -100,11 +99,10 @@ define(["util", "scene"],
         var dy = mousePos[1] - pos[1];
 		var r = this.drawStyle.radius;
 		console.log("this is a " + this);
-        return Math.sqrt(dx*dx + dy*dy) <= (r+10) && Math.sqrt(dx*dx + dy*dy) >= (r-10);  		
-
+        return Math.sqrt(dx*dx + dy*dy) <= (r+10) && Math.sqrt(dx*dx + dy*dy) >= (r-10); 
     };
         
-    /*
+    /**
      * Event handler triggered by a SceneController when mouse
      * is being dragged
      */
@@ -112,10 +110,9 @@ define(["util", "scene"],
     
         // change position of the associated original (!) object
         this.setPos(dragEvent);
-            
     };
 
     // this module exposes only the constructor for Dragger objects
     return RadiusDragger;
 
-})); // define
+}));

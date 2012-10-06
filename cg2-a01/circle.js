@@ -4,7 +4,9 @@
  *
  * Module: circle
  *
- * ...
+ * This represents a circle that has a center, a radius and a style. 
+ * It can be hit at the radius line and it's radius can be scaled by a dragger.
+ * Also the middlepoint can be dragged to another point.
  */
 
 /* requireJS module definition */
@@ -14,8 +16,8 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
     "use strict";
 
     /**
-     *  A simple circle that can be scaled 
-     *  by one point.
+     *  A simple circle thats radius can be scaled by one point.
+	 * It can be move by its center point
      *  Parameters:
      *  - center: array object representing [x,y] coordinates of center point
 	 *  - radius: number representing the radius of the circle
@@ -38,7 +40,9 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
         
     };
 
-    // draw this line into the provided 2D rendering context
+	/**
+     * Draw this line into the provided 2D rendering context
+	 */
     Circle.prototype.draw = function(context) {
 
         // draw actual line
@@ -59,49 +63,50 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
 		
         // actually start drawing
         context.stroke(); 
-        
     };
-
-    // test whether the mouse position is on this line segment
+	
+	/**
+	 * Test whether the mouse position is on the circle's radius(+/- 10)
+	 */
     Circle.prototype.isHit = function(context,mousePos) {
     
         // check whether the mouse is at the radius +/- 10
         var dx = mousePos[0] - this.center[0];
         var dy = mousePos[1] - this.center[1];
         return Math.sqrt(dx*dx + dy*dy) <= (this.radius+10) && Math.sqrt(dx*dx + dy*dy) >= (this.radius-10);          
-
     };
 	
-    // return list of draggers to manipulate this line
-    Circle.prototype.createDraggers = function() {
-	
-		console.log("Circle createDraggers");
+    /**
+	 * Return list of draggers to manipulate this line. we have 1 PointDragger and 1 RadiusDragger for each circle.
+     */
+	Circle.prototype.createDraggers = function() {
     
         var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true }
         var draggers = [];
 		
         // create closure and callbacks for dragger
         var _circle = this;
-        var getCenter = function() { return _circle.center; };
+        // preparing PointDragger
+		var getCenter = function() { return _circle.center; };
         var setCenter = function(dragEvent) { _circle.center = dragEvent.position; };
+		// preparing RadiusDragger
 		var getRadius = function() { return [_circle.center[0], _circle.center[1]+_circle.radius]; };
 		var setRadius = function(dragEvent) {
-			// Math.pow(zahl,exponent) rechnet zahl^exponet (hier quadrieren wir)
+			// with Math.pow(zahl,exponent) we calculate zahl^exponet
 			var quadX = Math.pow((_circle.center[0] - dragEvent.position[0]), 2);
 			var quadY = Math.pow((_circle.center[1] - dragEvent.position[1]), 2)
-			var pyt = Math.sqrt( quadX + quadY);
-			_circle.radius = pyt;
+			var pytagoras = Math.sqrt( quadX + quadY);
+			_circle.radius = pytagoras;
 		};
         draggers.push( new PointDragger(getCenter, setCenter, draggerStyle) );
-		draggers.push( new RadiusDragger(getRadius, setRadius, draggerStyle));
+		draggers.push( new RadiusDragger(getRadius, setRadius, draggerStyle) );
         
         return draggers;
-        
     };
     
     // this module only exports the constructor for Circle objects
     return Circle;
 
-})); // define
+}));
 
     

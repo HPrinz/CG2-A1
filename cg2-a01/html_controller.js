@@ -8,7 +8,6 @@
  * HTML elements on the page, e.g. buttons and parameter fields.
  *
  */
-
  
 /* requireJS module definition */
 define(["jquery", "straight_line", "circle"], 
@@ -16,12 +15,11 @@ define(["jquery", "straight_line", "circle"],
 
     "use strict"; 
                 
-    /*
+    /**
      * define callback functions to react to changes in the HTML page
      * and provide them with a closure defining context and scene
      */
     var HtmlController = function(context,scene,sceneController) {
-    
     
         // generate random X coordinate within the canvas
         var randomX = function() { 
@@ -56,7 +54,7 @@ define(["jquery", "straight_line", "circle"],
             return "#"+toHex2(r)+toHex2(g)+toHex2(b);
         };
         
-        /*
+        /**
          * event handler for "new line button".
          */
         $("#btnNewLine").click( (function() {
@@ -74,11 +72,10 @@ define(["jquery", "straight_line", "circle"],
 
             // deselect all objects, then select the newly created object
             sceneController.deselect();
-            sceneController.select(line); // this will also redraw
-                        
+            sceneController.select(line); // this will also redraw          
         }));
 		
-		/*
+		/**
          * event handler for "new circle button".
          */
 		$("#btnNewCircle").click( (function() {
@@ -97,18 +94,14 @@ define(["jquery", "straight_line", "circle"],
 
             // deselect all objects, then select the newly created object
             sceneController.deselect();
-            sceneController.select(circle); // this will also redraw
-                        
+            sceneController.select(circle); // this will also redraw     
         }));
-        
-    
     };
 
     // return the constructor function 
     return HtmlController;
 
-
-})); // require 
+})); 
 
 
 
