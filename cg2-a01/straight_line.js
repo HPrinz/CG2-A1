@@ -107,8 +107,15 @@ define(["util", "vec2", "scene", "point_dragger"],
 	}
 	
 	StraightLine.prototype.setLineColor = function(colorValue){
-		console.log("setting color from " + this.lineStyle.color + " to " + colorValue);
 		this.lineStyle.color = colorValue;
+	}
+	
+	StraightLine.prototype.getLineWidth = function(){
+		return this.lineStyle.width;
+	}
+	
+	StraightLine.prototype.setLineWidth = function(widthValue){
+		this.lineStyle.width = widthValue;
 	}
     
     // this module only exports the constructor for StraightLine objects

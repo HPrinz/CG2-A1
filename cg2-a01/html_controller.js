@@ -101,7 +101,7 @@ define(["jquery", "straight_line", "circle"],
          * event handler for "color submit"-Button.
          */
 		$("#colorSubmit").click( (function() {
-			console.log("color changed");
+			console.log("color should change");
 			var obj = sceneController.getSelectedObject();
 			if(obj instanceof Circle || obj instanceof StraightLine){
 				console.log("Farbe ist " + $("#colorInput").attr("value"));
@@ -114,12 +114,12 @@ define(["jquery", "straight_line", "circle"],
          * event handler for "line submit"-Button.
          */
 		$("#lineSubmit").click( (function() {
-			console.log("color changed");
+			console.log("line should change");
 			var obj = sceneController.getSelectedObject();
 			if(obj instanceof Circle || obj instanceof StraightLine){
-				console.log("Farbe ist " + $("#colorInput").attr("value"));
-				obj.setLineColor($("#colorInput").attr("value"));
-				obj.draw(sceneController.context);
+				console.log("Linienbreite ist " + $("#lineWidth").attr("value"));
+				obj.setLineWidth($("#lineWidth").attr("value"));
+				sceneController.scene.draw(sceneController.context);
 			}
 		}));
     };

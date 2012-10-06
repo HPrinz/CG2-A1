@@ -87,7 +87,6 @@ define(["util", "scene"],
 			//obj.draw(this.context);
 		}
 		this.selectCallback = func;
-		this.scene.draw(this.context);
     };
 
     /* 
@@ -104,7 +103,6 @@ define(["util", "scene"],
 			//obj.draw(this.context);
 		}
 		this.changeCallback = func;
-		this.scene.draw(this.context);
     };
     
     /*
