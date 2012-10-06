@@ -8,8 +8,8 @@
  */
 
 /* requireJS module definition */
-define(["util", "vec2", "scene", "point_dragger"], 
-       (function(Util,vec2,Scene,PointDragger) {
+define(["util", "vec2", "scene", "point_dragger", "radius_dragger"], 
+       (function(Util,vec2,Scene,PointDragger,RadiusDragger) {
        
     "use strict";
 
@@ -65,8 +65,7 @@ define(["util", "vec2", "scene", "point_dragger"],
     // test whether the mouse position is on this line segment
     Circle.prototype.isHit = function(context,mousePos) {
     
-        // check whether distance between mouse and dragger's center
-        // is at max (radius+1) 
+        // check whether the mouse is at the radius +/- 10
         var dx = mousePos[0] - this.center[0];
         var dy = mousePos[1] - this.center[1];
         return Math.sqrt(dx*dx + dy*dy) <= (this.radius+10) && Math.sqrt(dx*dx + dy*dy) >= (this.radius-10);          
@@ -85,7 +84,16 @@ define(["util", "vec2", "scene", "point_dragger"],
         var _circle = this;
         var getCenter = function() { return _circle.center; };
         var setCenter = function(dragEvent) { _circle.center = dragEvent.position; };
+		var getRadius = function() { return [_circle.center[0], _circle.center[1]+_circle.radius]; };
+		var setRadius = function(dragEvent) {
+			// Math.pow(zahl,exponent) rechnet zahl^exponet (hier quadrieren wir)
+			var quadX = Math.pow((_circle.center[0] - dragEvent.position[0]), 2);
+			var quadY = Math.pow((_circle.center[1] - dragEvent.position[1]), 2)
+			var pyt = Math.sqrt( quadX + quadY);
+			_circle.radius = pyt;
+		};
         draggers.push( new PointDragger(getCenter, setCenter, draggerStyle) );
+		draggers.push( new RadiusDragger(getRadius, setRadius, draggerStyle));
         
         return draggers;
         

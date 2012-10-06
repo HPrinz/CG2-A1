@@ -78,6 +78,9 @@ define(["jquery", "straight_line", "circle"],
                         
         }));
 		
+		/*
+         * event handler for "new circle button".
+         */
 		$("#btnNewCircle").click( (function() {
         
             // create the actual line and add it to the scene
