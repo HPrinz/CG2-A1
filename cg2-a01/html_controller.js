@@ -96,6 +96,32 @@ define(["jquery", "straight_line", "circle"],
             sceneController.deselect();
             sceneController.select(circle); // this will also redraw     
         }));
+		
+		/**
+         * event handler for "color submit"-Button.
+         */
+		$("#colorSubmit").click( (function() {
+			console.log("color changed");
+			var obj = sceneController.getSelectedObject();
+			if(obj instanceof Circle || obj instanceof StraightLine){
+				console.log("Farbe ist " + $("#colorInput").attr("value"));
+				obj.setLineColor($("#colorInput").attr("value"));
+				obj.draw(sceneController.context);
+			}
+		}));
+		
+		/**
+         * event handler for "line submit"-Button.
+         */
+		$("#lineSubmit").click( (function() {
+			console.log("color changed");
+			var obj = sceneController.getSelectedObject();
+			if(obj instanceof Circle || obj instanceof StraightLine){
+				console.log("Farbe ist " + $("#colorInput").attr("value"));
+				obj.setLineColor($("#colorInput").attr("value"));
+				obj.draw(sceneController.context);
+			}
+		}));
     };
 
     // return the constructor function 

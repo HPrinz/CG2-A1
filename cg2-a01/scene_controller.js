@@ -70,7 +70,7 @@ define(["util", "scene"],
         this.canvas.addEventListener('mousedown', (function(ev) { _controller.mousedown(ev); }), false);
         this.canvas.addEventListener('mousemove', (function(ev) { _controller.mousemove(ev); }), false);
         this.canvas.addEventListener('mouseup',   (function(ev) { _controller.mouseup(ev);   }), false);
-                                
+		                                
     };
     
     /* 
@@ -81,6 +81,13 @@ define(["util", "scene"],
      */
     SceneController.prototype.onSelection = function(func) {
         this.selectCallback = func;
+		var obj = this.getSelectedObject();
+		if(obj instanceof Circle || obj instanceof StraightLine){
+			$("#colorInput").attr("value", obj.getLineColor() );
+			//obj.draw(this.context);
+		}
+		this.selectCallback = func;
+		this.scene.draw(this.context);
     };
 
     /* 
@@ -90,7 +97,14 @@ define(["util", "scene"],
      *
      */
     SceneController.prototype.onObjChange = function(func) {
-        this.changeCallback = func;
+	    this.changeCallback = func;
+		var obj = this.getSelectedObject();
+		if(obj instanceof Circle || obj instanceof StraightLine){
+			$("#colorInput").attr("value", obj.getLineColor() );
+			//obj.draw(this.context);
+		}
+		this.changeCallback = func;
+		this.scene.draw(this.context);
     };
     
     /*

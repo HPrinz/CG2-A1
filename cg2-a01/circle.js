@@ -57,7 +57,7 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
         // set drawing style
 		context.closePath();
 		
-		context.lineWidth = this.lineStyle.width;
+		context.lineWidth   = this.lineStyle.width;
         context.strokeStyle = this.lineStyle.color;
         context.fillStyle   = this.lineStyle.color;
 		
@@ -103,10 +103,16 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
         
         return draggers;
     };
+	
+	Circle.prototype.getLineColor = function(){
+		return this.lineStyle.color;
+	}
+	
+	Circle.prototype.setLineColor = function(colorValue){
+		this.lineStyle.color = colorValue;
+	}
     
     // this module only exports the constructor for Circle objects
     return Circle;
 
 }));
-
-    
