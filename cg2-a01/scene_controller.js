@@ -95,7 +95,6 @@ define(["util", "scene"],
      *
      */
     SceneController.prototype.onObjChange = function(func) {
-		console.log("test");
 	    this.changeCallback = func;
     };
     

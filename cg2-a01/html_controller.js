@@ -29,17 +29,16 @@ define(["jquery", "straight_line", "circle"],
 		*/
 		var selectionHandler = function() {
 			var obj = sceneController.getSelectedObject();
-			
+			$("#colorInput").attr("value", obj.getLineColor());
+			obj.draw(sceneController.context);
 			if(obj instanceof Circle || obj instanceof StraightLine){
-				//$("#colorInput").attr("value", obj.getLineColor() );
-				//obj.draw(this.context);
 				if (obj instanceof Circle){
-						$("#radiusSubmit").show();
-						$("#radiusInput").show();
-						console.log("radius show");
+					$("#radiusSubmit").show();
+					$("#radiusInput").show();
+					console.log("radius show");
 				}else if(obj instanceof StraightLine){
-						$("#radiusSubmit").hide();
-						$("#radiusInput").hide();
+					$("#radiusSubmit").hide();
+					$("#radiusInput").hide();
 				}
 			}
 		};
@@ -48,7 +47,10 @@ define(["jquery", "straight_line", "circle"],
 		
 		var changeHandler = function() {
 			var obj = sceneController.getSelectedObject();
+			obj.setLineWidth($("#lineWidth").attr("value"));
+			sceneController.scene.draw(sceneController.context);
 			if(obj instanceof Circle){
+				// circle radius is set into the radius field
 				$("#radiusInput").attr("value", Math.floor(obj.getRadius()));
 			}
 		};
@@ -120,17 +122,14 @@ define(["jquery", "straight_line", "circle"],
                 width: Math.floor(Math.random()*3)+1,
                 color: randomColor()
             };
-            var currentRadius = randomRadius(); 
             var circle = new Circle( [randomX(),randomY()],
-									 currentRadius,
-									 style);
-                                        
+									 randomRadius(),
+									 style);                           
             scene.addObjects([circle]);
 			
 			// set current radius into the input field
-			var radiusInput = document.getElementById("radiusInput"); 
-			radiusInput.setAttribute("value", currentRadius);
-			console.log("Der aktuelle Radius betraegt:" + radiusInput.getAttribute("value"));
+			$("#radiusInput").attr("value", circle.getRadius());
+			console.log("The radius of the current circle is: " + $("#radiusInput").attr("value") + ".");
 
             // deselect all objects, then select the newly created object
             sceneController.deselect();
@@ -153,15 +152,15 @@ define(["jquery", "straight_line", "circle"],
 		/**
          * event handler for "line submit"-Button.
          */
-		$("#lineSubmit").click( (function() {
-			console.log("line should change");
-			var obj = sceneController.getSelectedObject();
-			if(obj instanceof Circle || obj instanceof StraightLine){
-				console.log("Linienbreite ist " + $("#lineWidth").attr("value"));
-				obj.setLineWidth($("#lineWidth").attr("value"));
-				sceneController.scene.draw(sceneController.context);
-			}
-		}));
+		// $("#lineSubmit").click( (function() {
+			// console.log("line should change");
+			// var obj = sceneController.getSelectedObject();
+			// if(obj instanceof Circle || obj instanceof StraightLine){
+				// console.log("Linienbreite ist " + $("#lineWidth").attr("value"));
+				// obj.setLineWidth($("#lineWidth").attr("value"));
+				// sceneController.scene.draw(sceneController.context);
+			// }
+		// }));
     }
 
     // return the constructor function 
