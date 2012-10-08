@@ -121,6 +121,14 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
 	Circle.prototype.setLineWidth = function(widthValue){
 		this.lineStyle.width = widthValue;
 	}
+	
+	Circle.prototype.getRadius = function(){
+		return this.radius;
+	}
+	
+	Circle.prototype.setRadius = function(newRadius){
+		this.radius = newRadius;
+	}
     
     // this module only exports the constructor for Circle objects
     return Circle;

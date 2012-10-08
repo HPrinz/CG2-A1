@@ -23,21 +23,38 @@ define(["jquery", "straight_line", "circle"],
      * and provide them with a closure defining context and scene
      */
     var HtmlController = function(context,scene,sceneController) {
-		$("#radiusSubmit").hide();
-		$("#radiusInput").hide();
 		
 		/* checks if the selected object is a circle or a line and shows/ 
 		 * hides radius button and input field
 		*/
-		var checkCurrentObj = function() { 
-			if(sceneController.getSelectedObject() instanceof Circle) {
-				$("#radiusSubmit").show();
-				$("#radiusInput").show();
-			}else if(sceneController.getSelectedObject() instanceof StraightLine){
-				$("#radiusSubmit").hide();
-				$("#radiusInput").hide();
+		var selectionHandler = function() {
+			var obj = sceneController.getSelectedObject();
+			
+			if(obj instanceof Circle || obj instanceof StraightLine){
+				//$("#colorInput").attr("value", obj.getLineColor() );
+				//obj.draw(this.context);
+				if (obj instanceof Circle){
+						$("#radiusSubmit").show();
+						$("#radiusInput").show();
+						console.log("radius show");
+				}else if(obj instanceof StraightLine){
+						$("#radiusSubmit").hide();
+						$("#radiusInput").hide();
+				}
 			}
 		};
+		
+		sceneController.onSelection(selectionHandler);
+		
+		var changeHandler = function() {
+			var obj = sceneController.getSelectedObject();
+			if(obj instanceof Circle){
+				$("#radiusInput").attr("value", Math.floor(obj.getRadius()));
+			}
+		};
+		
+		sceneController.onObjChange(changeHandler);
+
         // generate random X coordinate within the canvas
         var randomX = function() { 
             return Math.floor(Math.random()*(context.canvas.width-10))+5; 
@@ -75,7 +92,6 @@ define(["jquery", "straight_line", "circle"],
          * event handler for "new line button".
          */
         $("#btnNewLine").click( (function() {
-			checkCurrentObj();
 			
             // create the actual line and add it to the scene
             var style = { 
@@ -93,19 +109,19 @@ define(["jquery", "straight_line", "circle"],
             sceneController.select(line); // this will also redraw          
         }));
 		
-		var circle;
+
+		
 		/**
          * event handler for "new circle button".
          */
 		$("#btnNewCircle").click( (function() {	
-			checkCurrentObj();
             // create the actual line and add it to the scene
             var style = { 
                 width: Math.floor(Math.random()*3)+1,
                 color: randomColor()
             };
             var currentRadius = randomRadius(); 
-            circle = new Circle( [randomX(),randomY()],
+            var circle = new Circle( [randomX(),randomY()],
 									 currentRadius,
 									 style);
                                         
@@ -146,16 +162,7 @@ define(["jquery", "straight_line", "circle"],
 				sceneController.scene.draw(sceneController.context);
 			}
 		}));
-		
-		/*
-		$("#radiusSubmit").click( (function() {
-			var obj = sceneController.getSelectedObject();
-			var radiusInput = document.getElementById("radiusInput"); 
-			if(obj instanceof Circle){
-				obj.draw(sceneController.context);
-		}));
-		*/
-    };
+    }
 
     // return the constructor function 
     return HtmlController;

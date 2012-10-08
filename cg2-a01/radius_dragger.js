@@ -98,7 +98,6 @@ define(["util", "scene"],
         var dx = mousePos[0] - pos[0];
         var dy = mousePos[1] - pos[1];
 		var r = this.drawStyle.radius;
-		console.log("this is a " + this);
         return Math.sqrt(dx*dx + dy*dy) <= (r+10) && Math.sqrt(dx*dx + dy*dy) >= (r-10); 
     };
         

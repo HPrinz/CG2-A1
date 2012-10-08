@@ -61,8 +61,8 @@ define(["util", "scene"],
         this.dragStartPos = [0,0]; // position when dragging was started
         this.dragLastPos  = [0,0]; // last position used in dragging
         this.selected     = [];    // list of selected objects and their draggers
-        this.selectCallback = null; // function to be called with currently selected obj
-        this.changeCallback = null; // function to be called with currently selected obj
+        //this.selectCallback = null; // function to be called with currently selected obj
+        //this.changeCallback = null; // function to be called with currently selected obj
                 
         // create event handlers with a closure containing 
         // "tool" as a reference to this dragger
@@ -72,6 +72,11 @@ define(["util", "scene"],
         this.canvas.addEventListener('mouseup',   (function(ev) { _controller.mouseup(ev);   }), false);
 		                                
     };
+	
+	/* checks if the selected object is a circle or a line and shows/ 
+		 * hides radius button and input field
+		*/
+		
     
     /* 
      *  Register a callback for whenever the selection changes,
@@ -81,12 +86,6 @@ define(["util", "scene"],
      */
     SceneController.prototype.onSelection = function(func) {
         this.selectCallback = func;
-		var obj = this.getSelectedObject();
-		if(obj instanceof Circle || obj instanceof StraightLine){
-			$("#colorInput").attr("value", obj.getLineColor() );
-			//obj.draw(this.context);
-		}
-		this.selectCallback = func;
     };
 
     /* 
@@ -96,13 +95,8 @@ define(["util", "scene"],
      *
      */
     SceneController.prototype.onObjChange = function(func) {
+		console.log("test");
 	    this.changeCallback = func;
-		var obj = this.getSelectedObject();
-		if(obj instanceof Circle || obj instanceof StraightLine){
-			$("#colorInput").attr("value", obj.getLineColor() );
-			//obj.draw(this.context);
-		}
-		this.changeCallback = func;
     };
     
     /*
