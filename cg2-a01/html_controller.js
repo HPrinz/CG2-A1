@@ -10,6 +10,9 @@
  */
  
 /* requireJS module definition */
+
+
+
 define(["jquery", "straight_line", "circle"], 
        (function($, StraightLine, Circle) {
 
@@ -20,7 +23,21 @@ define(["jquery", "straight_line", "circle"],
      * and provide them with a closure defining context and scene
      */
     var HtmlController = function(context,scene,sceneController) {
-    
+		$("#radiusSubmit").hide();
+		$("#radiusInput").hide();
+		
+		/* checks if the selected object is a circle or a line and shows/ 
+		 * hides radius button and input field
+		*/
+		var checkCurrentObj = function() { 
+			if(sceneController.getSelectedObject() instanceof Circle) {
+				$("#radiusSubmit").show();
+				$("#radiusInput").show();
+			}else if(sceneController.getSelectedObject() instanceof StraightLine){
+				$("#radiusSubmit").hide();
+				$("#radiusInput").hide();
+			}
+		};
         // generate random X coordinate within the canvas
         var randomX = function() { 
             return Math.floor(Math.random()*(context.canvas.width-10))+5; 
@@ -58,7 +75,8 @@ define(["jquery", "straight_line", "circle"],
          * event handler for "new line button".
          */
         $("#btnNewLine").click( (function() {
-        
+			checkCurrentObj();
+			
             // create the actual line and add it to the scene
             var style = { 
                 width: Math.floor(Math.random()*3)+1,
@@ -75,22 +93,28 @@ define(["jquery", "straight_line", "circle"],
             sceneController.select(line); // this will also redraw          
         }));
 		
+		var circle;
 		/**
          * event handler for "new circle button".
          */
-		$("#btnNewCircle").click( (function() {
-        
+		$("#btnNewCircle").click( (function() {	
+			checkCurrentObj();
             // create the actual line and add it to the scene
             var style = { 
                 width: Math.floor(Math.random()*3)+1,
                 color: randomColor()
             };
-                        
-            var circle = new Circle( [randomX(),randomY()],
-									 randomRadius(),
+            var currentRadius = randomRadius(); 
+            circle = new Circle( [randomX(),randomY()],
+									 currentRadius,
 									 style);
                                         
             scene.addObjects([circle]);
+			
+			// set current radius into the input field
+			var radiusInput = document.getElementById("radiusInput"); 
+			radiusInput.setAttribute("value", currentRadius);
+			console.log("Der aktuelle Radius betraegt:" + radiusInput.getAttribute("value"));
 
             // deselect all objects, then select the newly created object
             sceneController.deselect();
@@ -122,6 +146,15 @@ define(["jquery", "straight_line", "circle"],
 				sceneController.scene.draw(sceneController.context);
 			}
 		}));
+		
+		/*
+		$("#radiusSubmit").click( (function() {
+			var obj = sceneController.getSelectedObject();
+			var radiusInput = document.getElementById("radiusInput"); 
+			if(obj instanceof Circle){
+				obj.draw(sceneController.context);
+		}));
+		*/
     };
 
     // return the constructor function 

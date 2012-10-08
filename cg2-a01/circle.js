@@ -73,7 +73,9 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
         // check whether the mouse is at the radius +/- 10
         var dx = mousePos[0] - this.center[0];
         var dy = mousePos[1] - this.center[1];
-        return Math.sqrt(dx*dx + dy*dy) <= (this.radius+10) && Math.sqrt(dx*dx + dy*dy) >= (this.radius-10);          
+		var condition1 = Math.sqrt(dx*dx + dy*dy) <= (this.radius+10);
+		var condition2 = Math.sqrt(dx*dx + dy*dy) >= (this.radius-10); 
+        return condition1 && condition2;
     };
 	
     /**
