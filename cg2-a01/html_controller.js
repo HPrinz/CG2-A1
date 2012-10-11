@@ -32,11 +32,8 @@ define(["jquery", "straight_line", "circle"],
 			var obj = sceneController.getSelectedObject();
 			if(obj instanceof Circle || obj instanceof StraightLine){
 				if (obj instanceof Circle){
-					$("#radiusSubmit").show();
 					$("#radiusInput").show();
-					console.log("radius show");
 				}else if(obj instanceof StraightLine){
-					$("#radiusSubmit").hide();
 					$("#radiusInput").hide();
 				}
 			}
@@ -46,11 +43,6 @@ define(["jquery", "straight_line", "circle"],
 		
 		var changeHandler = function() {
 			var obj = sceneController.getSelectedObject();
-
-			if(obj instanceof Circle){
-				// circle radius is set into the radius field
-				$("#radiusInput").attr("value", Math.floor(obj.getRadius()));
-
 			if(obj instanceof Circle || obj instanceof StraightLine){
 				$("#colorInput").attr("value", obj.getLineColor());
 				$("#lineWidth").attr("value", Math.floor(obj.getLineWidth()));
@@ -58,7 +50,6 @@ define(["jquery", "straight_line", "circle"],
 					$("#radiusInput").attr("value", Math.floor(obj.getRadius()));
 				}
 			}
-		}
 		};
 		
 		sceneController.onObjChange(changeHandler);
@@ -103,7 +94,7 @@ define(["jquery", "straight_line", "circle"],
 			
             // create the actual line and add it to the scene
             var style = { 
-                width: Math.floor(Math.random()*3)+1,
+                width: Math.floor(Math.random()*20)+1,
                 color: randomColor()
             };
                           
@@ -111,6 +102,8 @@ define(["jquery", "straight_line", "circle"],
                                          [randomX(),randomY()], 
                                          style );
             scene.addObjects([line]);
+			
+			$("#lineWidth").attr("value", line.getLineWidth());
 
             // deselect all objects, then select the newly created object
             sceneController.deselect();
@@ -125,7 +118,7 @@ define(["jquery", "straight_line", "circle"],
 		$("#btnNewCircle").click( (function() {	
             // create the actual line and add it to the scene
             var style = { 
-                width: Math.floor(Math.random()*3)+1,
+                width: Math.floor(Math.random()*20)+1,
                 color: randomColor()
             };
             var circle = new Circle( [randomX(),randomY()],
@@ -159,7 +152,7 @@ define(["jquery", "straight_line", "circle"],
 		/**
          * event handler for "line submit"-Button.
          */
-		$("#lineInput").change( (function() {
+		$("#lineWidth").change( (function() {
 			console.log("line should change");
 			var obj = sceneController.getSelectedObject();
 			if(obj instanceof Circle || obj instanceof StraightLine){
