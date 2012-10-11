@@ -145,7 +145,7 @@ define(["jquery", "straight_line", "circle"],
 		/**
          * event handler for "color submit"-Button.
          */
-		$("#colorSubmit").click( (function() {
+		$("#colorInput").change( (function() {
 			console.log("color should change");
 			var obj = sceneController.getSelectedObject();
 			if(obj instanceof Circle || obj instanceof StraightLine){
@@ -159,7 +159,7 @@ define(["jquery", "straight_line", "circle"],
 		/**
          * event handler for "line submit"-Button.
          */
-		$("#lineSubmit").click( (function() {
+		$("#lineInput").change( (function() {
 			console.log("line should change");
 			var obj = sceneController.getSelectedObject();
 			if(obj instanceof Circle || obj instanceof StraightLine){
@@ -170,7 +170,7 @@ define(["jquery", "straight_line", "circle"],
 			}
 		}));
 		
-		$("#radiusSubmit").click( (function() {
+		$("#radiusInput").change( (function() {
 			console.log("radius should change");
 			var obj = sceneController.getSelectedObject();
 			if(obj instanceof Circle){
@@ -179,6 +179,8 @@ define(["jquery", "straight_line", "circle"],
 				sceneController.select(obj); // this will also redraw
 			}
 		}));
+		
+		
 
     }
 
