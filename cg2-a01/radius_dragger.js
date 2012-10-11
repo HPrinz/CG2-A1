@@ -62,12 +62,12 @@ define(["util", "scene"],
      */
     RadiusDragger.prototype.draw = function (context) {
 
-        // what is my current position?
+	// what is my current position?
         var pos = this.getPos();
 
         // what shape to draw
         context.beginPath();
-        context.arc(pos[0], pos[1], // position
+        context.arc(pos[0], pos[1], 		  // position
                     this.drawStyle.radius,    // radius
                     0.0, Math.PI*2,           // start and end angle
                     true);                    // clockwise
@@ -75,7 +75,7 @@ define(["util", "scene"],
         
         // draw style
         context.lineWidth   = this.drawStyle.width;
-        context.strokeStyle = this.drawStyle.color;
+        context.strokeStyle = this.drawStyle.strokeStyle;
         context.fillStyle   = this.drawStyle.color;
         
         // trigger the actual drawing

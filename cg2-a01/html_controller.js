@@ -28,9 +28,8 @@ define(["jquery", "straight_line", "circle"],
 		 * hides radius button and input field
 		*/
 		var selectionHandler = function() {
+			changeHandler();
 			var obj = sceneController.getSelectedObject();
-			$("#colorInput").attr("value", obj.getLineColor());
-			obj.draw(sceneController.context);
 			if(obj instanceof Circle || obj instanceof StraightLine){
 				if (obj instanceof Circle){
 					$("#radiusSubmit").show();
@@ -47,12 +46,19 @@ define(["jquery", "straight_line", "circle"],
 		
 		var changeHandler = function() {
 			var obj = sceneController.getSelectedObject();
-			obj.setLineWidth($("#lineWidth").attr("value"));
-			sceneController.scene.draw(sceneController.context);
+
 			if(obj instanceof Circle){
 				// circle radius is set into the radius field
 				$("#radiusInput").attr("value", Math.floor(obj.getRadius()));
+
+			if(obj instanceof Circle || obj instanceof StraightLine){
+				$("#colorInput").attr("value", obj.getLineColor());
+				$("#lineWidth").attr("value", Math.floor(obj.getLineWidth()));
+				if(obj instanceof Circle){
+					$("#radiusInput").attr("value", Math.floor(obj.getRadius()));
+				}
 			}
+		}
 		};
 		
 		sceneController.onObjChange(changeHandler);
@@ -145,22 +151,35 @@ define(["jquery", "straight_line", "circle"],
 			if(obj instanceof Circle || obj instanceof StraightLine){
 				console.log("Farbe ist " + $("#colorInput").attr("value"));
 				obj.setLineColor($("#colorInput").attr("value"));
-				obj.draw(sceneController.context);
+				sceneController.deselect();
+				sceneController.select(obj); // this will also redraw     
 			}
 		}));
 		
 		/**
          * event handler for "line submit"-Button.
          */
-		// $("#lineSubmit").click( (function() {
-			// console.log("line should change");
-			// var obj = sceneController.getSelectedObject();
-			// if(obj instanceof Circle || obj instanceof StraightLine){
-				// console.log("Linienbreite ist " + $("#lineWidth").attr("value"));
-				// obj.setLineWidth($("#lineWidth").attr("value"));
-				// sceneController.scene.draw(sceneController.context);
-			// }
-		// }));
+		$("#lineSubmit").click( (function() {
+			console.log("line should change");
+			var obj = sceneController.getSelectedObject();
+			if(obj instanceof Circle || obj instanceof StraightLine){
+				console.log("Linienbreite ist " + $("#lineWidth").attr("value"));
+				obj.setLineWidth($("#lineWidth").attr("value"));
+				sceneController.deselect();
+				sceneController.select(obj); // this will also redraw     
+			}
+		}));
+		
+		$("#radiusSubmit").click( (function() {
+			console.log("radius should change");
+			var obj = sceneController.getSelectedObject();
+			if(obj instanceof Circle){
+				obj.setNewRadius($("#radiusInput").attr("value"));
+				sceneController.deselect();
+				sceneController.select(obj); // this will also redraw
+			}
+		}));
+
     }
 
     // return the constructor function 

@@ -116,7 +116,6 @@ define(["util"],
         for(var i=0; i<objs.length; i+=1) {
             objs[i].draw(context);
         }
-            
     };
     
     // this module only exports the constructor for Scene objects

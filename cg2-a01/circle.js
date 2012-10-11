@@ -44,7 +44,6 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
      * Draw this line into the provided 2D rendering context
 	 */
     Circle.prototype.draw = function(context) {
-
         // draw actual line
         context.beginPath();
         
@@ -103,6 +102,7 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
         draggers.push( new PointDragger(getCenter, setCenter, draggerStyle) );
 		draggers.push( new RadiusDragger(getRadius, setRadius, draggerStyle) );
         
+		console.log("createDraggers. Radius = " + _circle.radius);
         return draggers;
     };
 	
@@ -126,7 +126,7 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
 		return this.radius;
 	}
 	
-	Circle.prototype.setRadius = function(newRadius){
+	Circle.prototype.setNewRadius = function(newRadius){
 		this.radius = newRadius;
 	}
     
