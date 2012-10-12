@@ -24,9 +24,12 @@ define(["jquery", "straight_line", "circle"],
      */
     var HtmlController = function(context,scene,sceneController) {
 		
-		/* checks if the selected object is a circle or a line and shows/ 
+		/**
+		 * 
+		 * this is called when a object is selected.
+		 * It checks if the selected object is a circle or a line and shows/ 
 		 * hides radius button and input field
-		*/
+		 */
 		var selectionHandler = function() {
 			changeHandler();
 			var obj = sceneController.getSelectedObject();
@@ -41,6 +44,9 @@ define(["jquery", "straight_line", "circle"],
 		
 		sceneController.onSelection(selectionHandler);
 		
+		/**
+		 * this is called when a object is changed
+		 */
 		var changeHandler = function() {
 			var obj = sceneController.getSelectedObject();
 			if(obj instanceof Circle || obj instanceof StraightLine){
@@ -88,7 +94,7 @@ define(["jquery", "straight_line", "circle"],
         };
         
         /**
-         * event handler for "new line button".
+         * event handler for new line-button.
          */
         $("#btnNewLine").click( (function() {
 			
@@ -110,10 +116,8 @@ define(["jquery", "straight_line", "circle"],
             sceneController.select(line); // this will also redraw          
         }));
 		
-
-		
 		/**
-         * event handler for "new circle button".
+         * event handler for new circle-button.
          */
 		$("#btnNewCircle").click( (function() {	
             // create the actual line and add it to the scene
@@ -136,7 +140,7 @@ define(["jquery", "straight_line", "circle"],
         }));
 		
 		/**
-         * event handler for "color submit"-Button.
+         * event handler for color-Change.
          */
 		$("#colorInput").change( (function() {
 			console.log("color should change");
@@ -150,7 +154,7 @@ define(["jquery", "straight_line", "circle"],
 		}));
 		
 		/**
-         * event handler for "line submit"-Button.
+         * event handler for line width-Change.
          */
 		$("#lineWidth").change( (function() {
 			console.log("line should change");
@@ -163,6 +167,9 @@ define(["jquery", "straight_line", "circle"],
 			}
 		}));
 		
+		/**
+         * event handler for Radius-Change.
+         */
 		$("#radiusInput").change( (function() {
 			console.log("radius should change");
 			var obj = sceneController.getSelectedObject();
@@ -172,9 +179,6 @@ define(["jquery", "straight_line", "circle"],
 				sceneController.select(obj); // this will also redraw
 			}
 		}));
-		
-		
-
     }
 
     // return the constructor function 
