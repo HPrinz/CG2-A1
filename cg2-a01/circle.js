@@ -82,7 +82,7 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
      */
 	Circle.prototype.createDraggers = function() {
     
-        var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true }
+        var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true };
         var draggers = [];
 		
         // create closure and callbacks for dragger
@@ -95,7 +95,7 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
 		var setRadius = function(dragEvent) {
 			// with Math.pow(zahl,exponent) we calculate zahl^exponet
 			var quadX = Math.pow((_circle.center[0] - dragEvent.position[0]), 2);
-			var quadY = Math.pow((_circle.center[1] - dragEvent.position[1]), 2)
+			var quadY = Math.pow((_circle.center[1] - dragEvent.position[1]), 2);
 			var pytagoras = Math.sqrt( quadX + quadY);
 			_circle.radius = pytagoras;
 		};
@@ -108,27 +108,27 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
 	
 	Circle.prototype.getLineColor = function(){
 		return this.lineStyle.color;
-	}
+	};
 	
 	Circle.prototype.setLineColor = function(colorValue){
 		this.lineStyle.color = colorValue;
-	}
+	};
 	
 	Circle.prototype.getLineWidth = function(){
 		return this.lineStyle.width;
-	}
+	};
 	
 	Circle.prototype.setLineWidth = function(widthValue){
 		this.lineStyle.width = widthValue;
-	}
+	};
 	
 	Circle.prototype.getRadius = function(){
 		return this.radius;
-	}
+	};
 	
 	Circle.prototype.setNewRadius = function(newRadius){
 		this.radius = newRadius;
-	}
+	};
     
     // this module only exports the constructor for Circle objects
     return Circle;

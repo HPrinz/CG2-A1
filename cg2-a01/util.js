@@ -37,7 +37,7 @@ define(["jquery"], (function($) {
         e.obj = obj;
         return e;
 
-    }
+    };
 
     /** 
      *   Display the message / object related to a fatal error

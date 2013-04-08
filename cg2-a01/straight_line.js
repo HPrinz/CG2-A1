@@ -86,7 +86,7 @@ define(["util", "vec2", "scene", "point_dragger"],
     // return list of draggers to manipulate this line
     StraightLine.prototype.createDraggers = function() {
     
-        var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true }
+        var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true };
         var draggers = [];
         
         // create closure and callbacks for dragger
@@ -104,19 +104,19 @@ define(["util", "vec2", "scene", "point_dragger"],
 	
 	StraightLine.prototype.getLineColor = function(){
 		return this.lineStyle.color;
-	}
+	};
 	
 	StraightLine.prototype.setLineColor = function(colorValue){
 		this.lineStyle.color = colorValue;
-	}
+	};
 	
 	StraightLine.prototype.getLineWidth = function(){
 		return this.lineStyle.width;
-	}
+	};
 	
 	StraightLine.prototype.setLineWidth = function(widthValue){
 		this.lineStyle.width = widthValue;
-	}
+	};
     
     // this module only exports the constructor for StraightLine objects
     return StraightLine;

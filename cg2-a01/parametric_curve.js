@@ -1,4 +1,4 @@
-*
+/*
  * Hala Basali
  * Hanna Prinz
  *
@@ -30,7 +30,7 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
         console.log("Creating ParametricCurve with functions x(t)=" + 
                     funX + ", y(t)=" + funY + ", defined in [" +
                     maxT + "|" + minT + "], with " + segments + 
-					" segments and tickmarks shown? " + tickmarks ".");
+					" segments and tickmarks shown? " + tickmarks + ".");
         
         // draw style for drawing the line
         this.lineStyle = style || { width: "2", color: "#AA00AA" };
@@ -130,7 +130,7 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
      */
 	ParametricCurve.prototype.createDraggers = function() {
     
-        var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true }
+        var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true };
         var draggers = [];
 		
         // create closure and callbacks for dragger
@@ -143,7 +143,7 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
 		var setRadius = function(dragEvent) {
 			// with Math.pow(zahl,exponent) we calculate zahl^exponet
 			var quadX = Math.pow((_ParametricCurve.center[0] - dragEvent.position[0]), 2);
-			var quadY = Math.pow((_ParametricCurve.center[1] - dragEvent.position[1]), 2)
+			var quadY = Math.pow((_ParametricCurve.center[1] - dragEvent.position[1]), 2);
 			var pytagoras = Math.sqrt( quadX + quadY);
 			_ParametricCurve.radius = pytagoras;
 		};
@@ -156,27 +156,27 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
 	
 	ParametricCurve.prototype.getLineColor = function(){
 		return this.lineStyle.color;
-	}
+	};
 	
 	ParametricCurve.prototype.setLineColor = function(colorValue){
 		this.lineStyle.color = colorValue;
-	}
+	};
 	
 	ParametricCurve.prototype.getLineWidth = function(){
 		return this.lineStyle.width;
-	}
+	};
 	
 	ParametricCurve.prototype.setLineWidth = function(widthValue){
 		this.lineStyle.width = widthValue;
-	}
+	};
 	
 	ParametricCurve.prototype.getRadius = function(){
 		return this.radius;
-	}
+	};
 	
 	ParametricCurve.prototype.setNewRadius = function(newRadius){
 		this.radius = newRadius;
-	}
+	};
     
     // this module only exports the constructor for ParametricCurve objects
     return ParametricCurve;
