@@ -27,7 +27,7 @@ define([],
         return [v0[0] - v1[0], v0[1] - v1[1] ];
     };
 
-    // scalar product of two vectors, return scalar 
+    // dot product / scalar product of two vectors, return scalar value
     vec2.dot = function(v0,v1) {
         return v0[0] * v1[0] + v0[1] * v1[1];
     };
@@ -37,18 +37,20 @@ define([],
         return [ v[0]*s, v[1]*s ];
     };
     
-    // squared length of a vector
+    // return squared length of a vector
     vec2.length2 = function(v) {
         return vec2.dot(v,v);
     };
     
     // length of a vector
     vec2.length = function(v) {
-        return Math.sqrt(vec2.length2(v));
+         return Math.sqrt(vec2.dot(v,v));
     };
     
-    // project a point onto a line defined by two points.
-    // return scalar parameter of where point p is projected on line
+       // project a point onto a line defined by two points.
+    // return scalar parameter of where point p is projected 
+    // onto the line. the line segment between p0 and 01
+    // corresponds to the value range [0:1]
     vec2.projectPointOnLine = function(p, p0,p1) {
 
         var dp = vec2.sub(p,p0);

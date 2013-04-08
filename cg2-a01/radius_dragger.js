@@ -61,6 +61,8 @@ define(["util", "scene"],
      * draw the dragger as a small circle
      */
     RadiusDragger.prototype.draw = function (context) {
+    	
+    	console.log("draw radius dragger Position " + this.getPos() );
 
 	// what is my current position?
         var pos = this.getPos();

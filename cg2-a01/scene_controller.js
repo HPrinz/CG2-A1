@@ -61,27 +61,22 @@ define(["util", "scene"],
         this.dragStartPos = [0,0]; // position when dragging was started
         this.dragLastPos  = [0,0]; // last position used in dragging
         this.selected     = [];    // list of selected objects and their draggers
-        //this.selectCallback = null; // function to be called with currently selected obj
-        //this.changeCallback = null; // function to be called with currently selected obj
+        this.selectCallback = null; // function to be called with currently selected obj
+        this.changeCallback = null; // function to be called with currently selected obj
                 
         // create event handlers with a closure containing 
         // "tool" as a reference to this dragger
         var _controller = this;
-        this.canvas.addEventListener('mousedown', (function(ev) { _controller.mousedown(ev); }), false);
-        this.canvas.addEventListener('mousemove', (function(ev) { _controller.mousemove(ev); }), false);
-        this.canvas.addEventListener('mouseup',   (function(ev) { _controller.mouseup(ev);   }), false);
+        this.canvas.addEventListener('mousedown', (function(ev) { ev.preventDefault(); _controller.mousedown(ev); }), false);
+        this.canvas.addEventListener('mousemove', (function(ev) { ev.preventDefault(); _controller.mousemove(ev); }), false);
+        this.canvas.addEventListener('mouseup',   (function(ev) { ev.preventDefault(); _controller.mouseup(ev);   }), false);
 		                                
     };
 	
-	/* checks if the selected object is a circle or a line and shows/ 
-		 * hides radius button and input field
-		*/
-		
-    
     /* 
-     *  Register a callback for whenever the selection changes,
+     *  Register a callback function for whenever the selection changes,
      *  The callback function will be called with one parameter,
-     *  which is the currently selected object
+     *  which is the currently selected object.
      *
      */
     SceneController.prototype.onSelection = function(func) {
@@ -117,8 +112,6 @@ define(["util", "scene"],
      */
     SceneController.prototype.select = function(obj) {
 	
-		console.log("selecting an object");
-    
         if(!obj) {
             throw new "SceneController.select(): no object provided";
         };

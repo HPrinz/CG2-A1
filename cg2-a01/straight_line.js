@@ -35,10 +35,10 @@ define(["util", "vec2", "scene", "point_dragger"],
         
         // draw style for drawing the line
         this.lineStyle = lineStyle || { width: "2", color: "#0000AA" };
+       // initial values in case either point is undefined
 
-        // convert to Vec2 just in case the points were given as arrays
-        this.p0 = point0 || [0,0];
-        this.p1 = point1 || [0,0];
+        this.p0 = point0 || [10,10];
+        this.p1 = point1 || [50,10];
         
     };
 
@@ -68,7 +68,7 @@ define(["util", "vec2", "scene", "point_dragger"],
         var t = vec2.projectPointOnLine(pos, this.p0, this.p1);
                 
         // outside the line segment?
-        if(t<0.0 || t>vec2.length(vec2.sub(this.p0,this.p1))) {
+       if(t<0.0 || t>1.0) {
             return false; 
         }
         

@@ -48,10 +48,13 @@ define(["jquery", "straight_line", "circle"],
 		 * this is called when a object is changed
 		 */
 		var changeHandler = function() {
+			
 			var obj = sceneController.getSelectedObject();
+			
 			if(obj instanceof Circle || obj instanceof StraightLine){
 				$("#colorInput").attr("value", obj.getLineColor());
 				$("#lineWidth").attr("value", Math.floor(obj.getLineWidth()));
+				
 				if(obj instanceof Circle){
 					$("#radiusInput").attr("value", Math.floor(obj.getRadius()));
 				}
@@ -100,7 +103,7 @@ define(["jquery", "straight_line", "circle"],
 			
             // create the actual line and add it to the scene
             var style = { 
-                width: Math.floor(Math.random()*20)+1,
+                width: Math.floor(Math.random()*3)+1,
                 color: randomColor()
             };
                           
@@ -172,9 +175,11 @@ define(["jquery", "straight_line", "circle"],
          */
 		$("#radiusInput").change( (function() {
 			console.log("radius should change");
+			
 			var obj = sceneController.getSelectedObject();
 			if(obj instanceof Circle){
-				obj.setNewRadius($("#radiusInput").attr("value"));
+				// PARSEINT! Sonst werden die Werte von Circle.center[] und Circle.radius einfach aneinandergereiht. Also statt 2+2= 4 dann 2+"2" = 22
+				obj.setNewRadius(parseInt($("#radiusInput").attr("value")));
 				sceneController.deselect();
 				sceneController.select(obj); // this will also redraw
 			}
