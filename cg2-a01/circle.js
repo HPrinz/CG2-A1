@@ -92,7 +92,6 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
         var setCenter = function(dragEvent) { _circle.center = dragEvent.position; };
 		// preparing RadiusDragger
 		var getRadius = function() { 
-			console.log("Daten center0 : " + _circle.center[0] + ", center1 : " + _circle.center[1] + " radius : " +  _circle.radius);
 			return [_circle.center[0], _circle.center[1] + _circle.radius]; };
 		var setRadius = function(dragEvent) {
 			// with Math.pow(zahl,exponent) we calculate zahl^exponet
