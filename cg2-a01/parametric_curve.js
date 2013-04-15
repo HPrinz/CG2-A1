@@ -129,29 +129,7 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
 	 * Return list of draggers to manipulate this line. we have 1 PointDragger and 1 RadiusDragger for each ParametricCurve.
      */
 	ParametricCurve.prototype.createDraggers = function() {
-    
-        var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true };
-        var draggers = [];
-		
-        // create closure and callbacks for dragger
-        var _ParametricCurve = this;
-        // preparing PointDragger
-		var getCenter = function() { return _ParametricCurve.center; };
-        var setCenter = function(dragEvent) { _ParametricCurve.center = dragEvent.position; };
-		// preparing RadiusDragger
-		var getRadius = function() { return [_ParametricCurve.center[0], _ParametricCurve.center[1]+_ParametricCurve.radius]; };
-		var setRadius = function(dragEvent) {
-			// with Math.pow(zahl,exponent) we calculate zahl^exponet
-			var quadX = Math.pow((_ParametricCurve.center[0] - dragEvent.position[0]), 2);
-			var quadY = Math.pow((_ParametricCurve.center[1] - dragEvent.position[1]), 2);
-			var pytagoras = Math.sqrt( quadX + quadY);
-			_ParametricCurve.radius = pytagoras;
-		};
-        draggers.push( new PointDragger(getCenter, setCenter, draggerStyle) );
-		draggers.push( new RadiusDragger(getRadius, setRadius, draggerStyle) );
-        
-		console.log("createDraggers. Radius = " + _ParametricCurve.radius);
-        return draggers;
+        return [];
     };
 	
 	ParametricCurve.prototype.getLineColor = function(){

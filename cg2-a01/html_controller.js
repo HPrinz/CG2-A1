@@ -13,8 +13,8 @@
 
 
 
-define(["jquery", "straight_line", "circle"], 
-       (function($, StraightLine, Circle) {
+define(["jquery", "straight_line", "circle", "parametric-curve"], 
+       (function($, StraightLine, Circle, ParametricCurve) {
 
     "use strict"; 
                 
