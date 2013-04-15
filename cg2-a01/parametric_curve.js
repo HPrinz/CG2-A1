@@ -52,14 +52,6 @@ define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger,
 		// draw actual line
 		context.beginPath();
 
-		// for (var i=iMin;i<=iMax;i++) {
-		// xx = dx*i; yy = scale*func(xx/scale);
-		// if (i==iMin) ctx.moveTo(x0+xx,y0-yy);
-		// else ctx.lineTo(x0+xx,y0-yy);
-		// }
-		// ctx.stroke();
-		// }
-
 		for ( var t = minT; t <= maxT; t++) {
 
 			var x = eval(this.funX);
@@ -134,6 +126,7 @@ define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger,
 		var condition2 = Math.sqrt(dx * dx + dy * dy) >= (this.radius - 10);
 		return condition1 && condition2;
 	};
+
 
 	/**
 	 * Return list of draggers to manipulate this line. we have 1 PointDragger
