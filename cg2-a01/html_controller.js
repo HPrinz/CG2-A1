@@ -195,8 +195,8 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" ], (function($,
 			
 			var xInput = $("#xInput").attr("value");
 			var yInput = $("#yInput").attr("value");
-			var minT = parseInt($("#minTInput").attr("value"));
-			var maxT = parseInt($("#maxTInput").attr("value"));
+			var minT = parseFloat($("#minTInput").attr("value"));
+			var maxT = parseFloat($("#maxTInput").attr("value"));
 			var segments = parseInt($("#segmentsInput").attr("value"));
 			
 			if (maxT <= minT){
