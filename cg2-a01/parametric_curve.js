@@ -10,27 +10,21 @@
  */
 
 /* requireJS module definition */
-define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger,
-		RadiusDragger) {
+define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger, RadiusDragger) {
 
 	"use strict";
 
 	/**
-	 * A simple ParametricCurve thats radius can be scaled by one point. It can
-	 * be move by its center point Parameters: - center: array object
-	 * representing [x,y] coordinates of center point - radius: number
-	 * representing the radius of the ParametricCurve - lineStyle: object
-	 * defining width and color attributes for line drawing, begin of the form {
+	 * A simple ParametricCurve thats radius can be scaled by one point. It can be move by its center point Parameters: -
+	 * center: array object representing [x,y] coordinates of center point - radius: number representing the radius of
+	 * the ParametricCurve - lineStyle: object defining width and color attributes for line drawing, begin of the form {
 	 * width: 2, color: "#00FF00" }
 	 */
 
-	var ParametricCurve = function(funX, funY, minT, maxT, segments, tickmarks,
-			style) {
+	var ParametricCurve = function(funX, funY, minT, maxT, segments, tickmarks, style) {
 
-		console.log("Creating ParametricCurve with functions x(t)=" + funX
-				+ ", y(t)=" + funY + ", defined in [" + maxT + "|" + minT
-				+ "], with " + segments + " segments and tickmarks shown? "
-				+ tickmarks + ".");
+		console.log("Creating ParametricCurve with functions x(t)=" + funX + ", y(t)=" + funY + ", defined in [" + maxT + "|" + minT
+				+ "], with " + segments + " segments and tickmarks shown? " + tickmarks + ".");
 
 		// draw style for drawing the line
 		this.lineStyle = style || {
@@ -43,6 +37,8 @@ define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger,
 		this.funY = funY || 5;
 		this.minT = minT || 0;
 		this.maxT = maxT || 1;
+		this.segments = segments || 5;
+		this.tickmarks = tickmarks;
 	};
 
 	/**
@@ -51,12 +47,21 @@ define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger,
 	ParametricCurve.prototype.draw = function(context) {
 		// draw actual line
 		context.beginPath();
+		
+	
+		
+		console.log("segments = " + this.segments + "\n minT = " + this.minT + " maxT = " + this.maxT);
+		
+		var segmentDistance = Math.abs((this.maxT - this.minT)/this.segments);
+		
+		console.log("segmentsDistance = " + segmentDistance);
 
-		for ( var t = this.minT; t <= this.maxT; t++) {
-
+		for ( var t = this.minT; t <= this.maxT; t = t + segmentDistance) {
+			
 			var x = eval(this.funX);
 			var y = eval(this.funY);
 
+//			console.log("drawing to point = " + x + "/" + y);
 			context.lineTo(x, y);
 
 		}
@@ -114,8 +119,7 @@ define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger,
 	};
 
 	/**
-	 * Test whether the mouse position is on the ParametricCurve's radius(+/-
-	 * 10)
+	 * Test whether the mouse position is on the ParametricCurve's radius(+/- 10)
 	 */
 	ParametricCurve.prototype.isHit = function(context, mousePos) {
 
@@ -127,10 +131,9 @@ define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger,
 		return condition1 && condition2;
 	};
 
-
 	/**
-	 * Return list of draggers to manipulate this line. we have 1 PointDragger
-	 * and 1 RadiusDragger for each ParametricCurve.
+	 * Return list of draggers to manipulate this line. we have 1 PointDragger and 1 RadiusDragger for each
+	 * ParametricCurve.
 	 */
 	ParametricCurve.prototype.createDraggers = function() {
 		return [];
