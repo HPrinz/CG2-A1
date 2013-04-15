@@ -52,7 +52,7 @@ define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger,
 		// draw actual line
 		context.beginPath();
 
-		for ( var t = minT; t <= maxT; t++) {
+		for ( var t = this.minT; t <= this.maxT; t++) {
 
 			var x = eval(this.funX);
 			var y = eval(this.funY);
