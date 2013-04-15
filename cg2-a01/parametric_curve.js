@@ -10,7 +10,7 @@
  */
 
 /* requireJS module definition */
-define(["util", "vec2", "scene", "point_dragger", "radius_dragger"], 
+define(["util", "vec2", "scene"], 
        (function(Util,vec2,Scene,PointDragger,RadiusDragger) {
        
     "use strict";

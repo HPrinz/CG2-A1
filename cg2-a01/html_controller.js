@@ -184,6 +184,7 @@ define(["jquery", "straight_line", "circle", "parametric-curve"],
 				sceneController.select(obj); // this will also redraw
 			}
 		}));
+		
     };
 
     // return the constructor function 
