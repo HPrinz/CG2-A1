@@ -54,21 +54,32 @@ define([ "util", "vec2", "scene", "straight_line" ], (function(Util, vec2, Scene
 		var segmentDistance = Math.abs((this.maxT - this.minT)/this.segments);
 		
 		console.log("segmentsDistance = " + segmentDistance);
+		
+		// draw the first point
+		var t = this.minT;
+		var x = eval(this.funX);
+		var y = eval(this.funY);
+		context.lineTo(x, y);
 
-		for ( var t = this.minT + segmentDistance; t <= this.maxT; t = t + segmentDistance) {
+		//draw all other points
+		for ( t = this.minT + segmentDistance; t <= this.maxT; t = t + segmentDistance) {
 			
-			var x = eval(this.funX);
-			var y = eval(this.funY);
-			
+			// calculating last point
 			t = t - segmentDistance;
 			var xBefore = eval(this.funX);
 			var yBefore = eval(this.funY);
 			t = t + segmentDistance;
 			
+			//calculating new point
+			var x = eval(this.funX);
+			var y = eval(this.funY);
+
+			//draw the line
+			context.lineTo(x, y);
+			
+			// save as StraightLine for the isHit()-function without drawing the line!
 			var line = new StraightLine([xBefore, yBefore], [x,y],this.lineStyle);
 			this.lines.push(line);
-			
-			line.draw(context);
 
 		}
 		context.lineWidth = this.lineStyle.width;
