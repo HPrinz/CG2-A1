@@ -7,7 +7,7 @@ body {
 /* subsection titles for the parameter area */
 h3 {
     color: #000055;
-    font-size:14px;
+    font-size:13px;
 }
 
 /* region to display an error */
@@ -35,6 +35,7 @@ h3 {
     border-style: dashed;
     border-color: #c3c3c3;
     text-align:left;
+    font-size:13px;
 }
 
 /* all input elements get a fixed width */

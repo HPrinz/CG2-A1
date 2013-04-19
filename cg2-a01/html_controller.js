@@ -29,10 +29,10 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" ], (function($,
 		var selectionHandler = function() {
 			changeHandler();
 			var obj = sceneController.getSelectedObject();
-			if (obj instanceof Circle || obj instanceof StraightLine) {
+			if (obj instanceof Circle || obj instanceof StraightLine || obj.lines[0] instanceof StraightLine) {
 				if (obj instanceof Circle) {
 					$("#radiusInput").show();
-				} else if (obj instanceof StraightLine) {
+				} else{
 					$("#radiusInput").hide();
 				}
 			}
@@ -54,6 +54,10 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" ], (function($,
 				if (obj instanceof Circle) {
 					$("#radiusInput").attr("value", Math.floor(obj.getRadius()));
 				}
+			}
+			else if (obj instanceof ParametricCurve){
+				$("#colorInput").attr("value", obj.lines[0].getLineColor());
+				$("#lineWidth").attr("value", Math.floor(obj.lines[0].getLineWidth()));
 			}
 		};
 
@@ -141,7 +145,7 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" ], (function($,
 		$("#colorInput").change((function() {
 			console.log("color should change");
 			var obj = sceneController.getSelectedObject();
-			if (obj instanceof Circle || obj instanceof StraightLine) {
+			if (obj instanceof Circle || obj instanceof StraightLine|| obj instanceof ParametricCurve) {
 				console.log("Farbe ist " + $("#colorInput").attr("value"));
 				obj.setLineColor($("#colorInput").attr("value"));
 				sceneController.deselect();
@@ -155,7 +159,7 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" ], (function($,
 		$("#lineWidth").change((function() {
 			console.log("line should change");
 			var obj = sceneController.getSelectedObject();
-			if (obj instanceof Circle || obj instanceof StraightLine) {
+			if (obj instanceof Circle || obj instanceof StraightLine || obj instanceof ParametricCurve) {
 				console.log("Linienbreite ist " + $("#lineWidth").attr("value"));
 				obj.setLineWidth($("#lineWidth").attr("value"));
 				sceneController.deselect();
@@ -179,6 +183,21 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" ], (function($,
 			}
 		}));
 
+		/**
+		 * event handler for Clear-Button.
+		 */
+		$("#btnClear").click((function() {
+			console.log("radius should change");
+
+			scene.clear();
+			sceneController.deselect();
+			sceneController.select();
+			
+		}));
+		
+		/**
+		 * event handler for New Curve-Button.
+		 */
 		$("#btnNewCurve").click((function() {
 			console.log("new Parametric curve");
 

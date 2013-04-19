@@ -10,7 +10,7 @@
  */
 
 /* requireJS module definition */
-define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger, RadiusDragger) {
+define([ "util", "vec2", "scene", "straight_line" ], (function(Util, vec2, Scene, StraightLine) {
 
 	"use strict";
 
@@ -39,6 +39,7 @@ define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger, R
 		this.maxT = maxT || 1;
 		this.segments = segments || 5;
 		this.tickmarks = tickmarks;
+		this.lines = [];
 	};
 
 	/**
@@ -48,21 +49,26 @@ define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger, R
 		// draw actual line
 		context.beginPath();
 		
-	
-		
 		console.log("segments = " + this.segments + "\n minT = " + this.minT + " maxT = " + this.maxT);
 		
 		var segmentDistance = Math.abs((this.maxT - this.minT)/this.segments);
 		
 		console.log("segmentsDistance = " + segmentDistance);
 
-		for ( var t = this.minT; t <= this.maxT; t = t + segmentDistance) {
+		for ( var t = this.minT + segmentDistance; t <= this.maxT; t = t + segmentDistance) {
 			
 			var x = eval(this.funX);
 			var y = eval(this.funY);
-
-//			console.log("drawing to point = " + x + "/" + y);
-			context.lineTo(x, y);
+			
+			t = t - segmentDistance;
+			var xBefore = eval(this.funX);
+			var yBefore = eval(this.funY);
+			t = t + segmentDistance;
+			
+			var line = new StraightLine([xBefore, yBefore], [x,y],this.lineStyle);
+			this.lines.push(line);
+			
+			line.draw(context);
 
 		}
 		context.lineWidth = this.lineStyle.width;
@@ -71,51 +77,6 @@ define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger, R
 		// actually start drawing
 		context.stroke();
 
-		// function fun1(x) {return Math.sin(x); }
-		// function fun2(x) {return Math.cos(3*x);}
-
-		// function draw() {
-		// var canvas = document.getElementById("canvas");
-		// if (null==canvas || !canvas.getContext) return;
-
-		// var axes={}, ctx=canvas.getContext("2d");
-		// axes.x0 = .5 + .5*canvas.width; // x0 pixels from left to x=0
-		// axes.y0 = .5 + .5*canvas.height; // y0 pixels from top to y=0
-		// axes.scale = 40; // 40 pixels from x=0 to x=1
-		// axes.doNegativeX = true;
-
-		// showAxes(ctx,axes);
-		// funGraph(ctx,axes,fun1,"rgb(11,153,11)",1);
-		// funGraph(ctx,axes,fun2,"rgb(66,44,255)",2);
-		// }
-
-		// function funGraph (ctx,axes,func,color,thick) {
-		// var xx, yy, dx=4, x0=axes.x0, y0=axes.y0, scale=axes.scale;
-		// var iMax = Math.round((ctx.canvas.width-x0)/dx);
-		// var iMin = axes.doNegativeX ? Math.round(-x0/dx) : 0;
-		// ctx.beginPath();
-		// ctx.lineWidth = thick;
-		// ctx.strokeStyle = color;
-
-		// for (var i=iMin;i<=iMax;i++) {
-		// xx = dx*i; yy = scale*func(xx/scale);
-		// if (i==iMin) ctx.moveTo(x0+xx,y0-yy);
-		// else ctx.lineTo(x0+xx,y0-yy);
-		// }
-		// ctx.stroke();
-		// }
-
-		// function showAxes(ctx,axes) {
-		// var x0=axes.x0, w=ctx.canvas.width;
-		// var y0=axes.y0, h=ctx.canvas.height;
-		// var xmin = axes.doNegativeX ? 0 : x0;
-		// ctx.beginPath();
-		// ctx.strokeStyle = "rgb(128,128,128)";
-		// ctx.moveTo(xmin,y0); ctx.lineTo(w,y0); // X axis
-		// ctx.moveTo(x0,0); ctx.lineTo(x0,h); // Y axis
-		// ctx.stroke();
-		// }
-
 	};
 
 	/**
@@ -123,12 +84,15 @@ define([ "util", "vec2", "scene" ], (function(Util, vec2, Scene, PointDragger, R
 	 */
 	ParametricCurve.prototype.isHit = function(context, mousePos) {
 
-		// check whether the mouse is at the radius +/- 10
-		var dx = mousePos[0] - this.center[0];
-		var dy = mousePos[1] - this.center[1];
-		var condition1 = Math.sqrt(dx * dx + dy * dy) <= (this.radius + 10);
-		var condition2 = Math.sqrt(dx * dx + dy * dy) >= (this.radius - 10);
-		return condition1 && condition2;
+		 for(var i = 0; i < this.lines.length; i++) {
+			 var isHit = this.lines[i].isHit(context, mousePos);
+			 if (isHit){
+				 console.log("We hit a line!");
+				 return true;
+			 }
+		 }
+		
+		return false;
 	};
 
 	/**

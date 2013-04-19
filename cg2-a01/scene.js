@@ -48,6 +48,14 @@ define(["util"],
         }
             
     };
+    
+    /*
+     * remove all drawable objects from the scene
+     */
+    Scene.prototype.clear = function(objects) {
+    	this.drawableObjects = [];
+            
+    };
 
     /*
      * remove drawable objects from the scene (provided in an array)
