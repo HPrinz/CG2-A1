@@ -23,10 +23,8 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 
 	var ParametricCurve = function(funX, funY, minT, maxT, segments, tickmarks, style) {
 
-		// console.log("Creating ParametricCurve with functions x(t)=" + funX + ", y(t)=" + funY + ", defined in [" +
-		// maxT + "|"
-		// + minT
-		// + "], with " + segments + " segments and tickmarks shown? " + tickmarks + ".");
+		 console.log("Creating ParametricCurve with functions x(t)=" + funX + ", y(t)=" + funY + ", defined in [" + maxT + "|" + minT
+				+ "], with " + segments + " segments and tickmarks shown? " + tickmarks + ".");
 
 		// draw style for drawing the line
 		this.lineStyle = style || {
@@ -42,92 +40,55 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 		this.segments = segments || 5;
 		this.tickmarks = tickmarks;
 		this.lines = [];
-		this.draggers = [];
+
+		this.tArr = [];
 	};
 
 	/**
 	 * Draw this line into the provided 2D rendering context
 	 */
 	ParametricCurve.prototype.draw = function(context) {
-		// draw actual line
-		context.beginPath();
 
-		// console.log("segments = " + this.segments + "\n minT = " + this.minT + " maxT = " + this.maxT);
+		// reset
+		this.tArr = [];
 
 		var segmentDistance = Math.abs((this.maxT - this.minT) / this.segments);
 
-		// console.log("segmentsDistance = " + segmentDistance);
+		// draw actual line
+		context.beginPath();
 
-		// draw the first point
-		var t = this.minT;
-		var x = eval(this.funX);
-		var y = eval(this.funY);
-		context.lineTo(x, y);
+		// calculating all t's
+		for ( var i = 0; i <= this.segments; i++) {
+			this.tArr.push(this.minT + (i * segmentDistance));
+		}
 
-		console.log("First Coords = " + x + "/" + y);
+		// drawing all points
+		for ( var j = 0; j < this.tArr.length; j++) {
 
-		this.draggers = [];
-		
-		// draw all other points
-		// TODO i * segmentsdistance anstatt immer hochzählen
-		for (t = this.minT + segmentDistance; t <= this.maxT; t = t + segmentDistance) {
-
-			// calculating last point
-			t = t - segmentDistance;
-//			console.log("smallT = " + t);
-			var xBefore = eval(this.funX);
-			var yBefore = eval(this.funY);
-			t = t + segmentDistance;
-
-//			console.log("middleT = " + t);
+			// console.log("tArr = " + this.tArr);
 
 			// calculating new point
+			var t = this.tArr[j];
 			var x = eval(this.funX);
 			var y = eval(this.funY);
 
-			// draw the line
+			// draw the line to it
 			context.lineTo(x, y);
-//			console.log("drawing to = " + x + "/" + y);
 
-			// // set tickmarks
-
-			if (this.tickmarks == true) {
-
-				t = t + segmentDistance;
-//				console.log("bigT = " + t);
-				var xAfter = eval(this.funX);
-				var yAfter = eval(this.funY);
-				t = t - segmentDistance;
-
-				// funX
-//				console.log("X =  " + xBefore + "/" + x + "/"+ xAfter);
-//				console.log("Y =  " + yBefore + "/" + y + "/"+ yAfter);
-//				console.log("Calculating " + x + "+" + ((xAfter - xBefore) / 2));
+			// for isHit()
+			if (j != 0) {
 				
-				var diffX = x + (-(yAfter - yBefore) / 8);
+				// calculate last point
+				t = this.tArr[j - 1];
+				var beforeX = eval(this.funX);
+				var beforeY = eval(this.funY);
 
-				// funY
-//				console.log("Calculating " + y + "+" + (((yAfter - xBefore) / 2)));
-				var diffY = y + (((xAfter - xBefore) / 8));
-				
-				var diffX2 = x + ((yAfter - yBefore) / 8);
-
-				// funY
-//				console.log("Calculating " + y + "+" + (((yAfter - xBefore) / 2)));
-				var diffY2 = y + (-((xAfter - xBefore) / 8));
-
-				var mark = new StraightLine([diffX2, diffY2], [diffX, diffY], { width: "1", color: "#DF013A" });
-//				console.log("creating straight line from [" + (diffX - 1) + "," + (diffY - 1) + "] to [" + (diffX + 1) + "," + (diffY + 1)
-//						+ "].");
-
-				this.draggers.push(new Tickmarks(mark));
+				// save as StraightLine for the isHit()-function without drawing the line!
+				var line = new StraightLine([ beforeX, beforeY ], [ x, y ], this.lineStyle);
+				this.lines.push(line);
 			}
-
-			// save as StraightLine for the isHit()-function without drawing the line!
-			var line = new StraightLine([ xBefore, yBefore ], [ x, y ], this.lineStyle);
-			this.lines.push(line);
-
 		}
+
 		context.lineWidth = this.lineStyle.width;
 		context.strokeStyle = this.lineStyle.color;
 
@@ -157,7 +118,50 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 	 * ParametricCurve.
 	 */
 	ParametricCurve.prototype.createDraggers = function() {
-		return this.draggers;
+
+		var draggers = [];
+
+		// set tickmarks if its set and if we are not at the first or last point
+		if (this.tickmarks) {
+			for ( var j = 1; j < this.tArr.length; j++) {
+
+				// calculate current point
+				var t = this.tArr[j];
+				var x = eval(this.funX);
+				var y = eval(this.funY);
+
+				// calculate last point
+				t = this.tArr[j - 1];
+				var beforeX = eval(this.funX);
+				var beforeY = eval(this.funY);
+
+				// calculate next point
+				t = this.tArr[j + 1];
+				var afterX = eval(this.funX);
+				var afterY = eval(this.funY);
+
+				// tangente von x = PunktDanach - PunktDavor / n (zum Kürzen)
+				var tangenteX = (afterX - beforeX) / 8;
+				var tangenteY = (afterY - beforeY) / 8;
+
+				// normale von [x, y] = [-y, x]
+				var normaleX = -tangenteY;
+				var normaleY = tangenteX;
+
+				// connect two points for the normale: One over and one under the curve
+				var pointOverCurve = [ x + normaleX, y + normaleY ];
+				var pointUnderCurve = [ x - normaleX, y - normaleY ];
+
+				var mark = new StraightLine(pointOverCurve, pointUnderCurve, {
+					width : "1",
+					color : "#DF013A"
+				});
+
+				draggers.push(new Tickmarks(mark));
+			}
+		}
+
+		return draggers;
 	};
 
 	ParametricCurve.prototype.getLineColor = function() {
