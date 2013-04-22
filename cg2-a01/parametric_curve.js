@@ -23,8 +23,8 @@ define([ "util", "vec2", "scene", "straight_line" ], (function(Util, vec2, Scene
 
 	var ParametricCurve = function(funX, funY, minT, maxT, segments, tickmarks, style) {
 
-		console.log("Creating ParametricCurve with functions x(t)=" + funX + ", y(t)=" + funY + ", defined in [" + maxT + "|" + minT
-				+ "], with " + segments + " segments and tickmarks shown? " + tickmarks + ".");
+//		console.log("Creating ParametricCurve with functions x(t)=" + funX + ", y(t)=" + funY + ", defined in [" + maxT + "|" + minT
+//				+ "], with " + segments + " segments and tickmarks shown? " + tickmarks + ".");
 
 		// draw style for drawing the line
 		this.lineStyle = style || {
@@ -49,11 +49,11 @@ define([ "util", "vec2", "scene", "straight_line" ], (function(Util, vec2, Scene
 		// draw actual line
 		context.beginPath();
 		
-		console.log("segments = " + this.segments + "\n minT = " + this.minT + " maxT = " + this.maxT);
+//		console.log("segments = " + this.segments + "\n minT = " + this.minT + " maxT = " + this.maxT);
 		
 		var segmentDistance = Math.abs((this.maxT - this.minT)/this.segments);
 		
-		console.log("segmentsDistance = " + segmentDistance);
+//		console.log("segmentsDistance = " + segmentDistance);
 		
 		// draw the first point
 		var t = this.minT;
@@ -76,6 +76,27 @@ define([ "util", "vec2", "scene", "straight_line" ], (function(Util, vec2, Scene
 
 			//draw the line
 			context.lineTo(x, y);
+			
+//			// set tickmarks
+//			if(this.tickmarks == true) {
+//				// funX
+//				var xPrev = x - segmentDistance;
+//				var xNext = x + segmentDistance;
+//				var diffX = (xNext - xPrev) / 2;
+//				// funY
+//				var yPrev = y - segmentDistance;
+//				var yNext = y + segmentDistance;
+//				var diffY = (yNext - yPrev) / 2;
+//				
+//				var line = new StraightLine([diffX - 1, diffY - 1], [diffX + 1, diffY + 1], this.lineStyle);
+//				   console.log("creating straight line from [" + 
+//		                    (diffX - 1) + "," + (diffY - 1) + "] to [" +
+//		                    (diffX + 1) + "," + (diffY + 1) + "].");
+//				   
+//				   scene.addObjects([ line ]);
+//					sceneController.deselect();
+//					sceneController.select(line);
+//			}
 			
 			// save as StraightLine for the isHit()-function without drawing the line!
 			var line = new StraightLine([xBefore, yBefore], [x,y],this.lineStyle);
