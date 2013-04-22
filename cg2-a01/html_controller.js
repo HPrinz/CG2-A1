@@ -206,11 +206,6 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" ], (function($,
 				color : randomColor()
 			};
 
-			var tickmarks = false;
-			// if the checkbox is checked, the attribute checked will be "checked" else the attribute will be undefined
-			if ($("#tickMarkBox").attr("checked") == "checked") {
-				tickmarks = true;
-			}
 			
 			var xInput = $("#xInput").attr("value");
 			var yInput = $("#yInput").attr("value");
@@ -225,6 +220,13 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" ], (function($,
 				$("#minTInput").attr("value", minT);
 				$("#maxTInput").attr("value", maxT);
 			}	
+			var tickmarks = false;
+
+			// if the checkbox is checked, the attribute checked will be "checked" else the attribute will be undefined
+			if ($("#tickMarkBox").attr("checked") == "checked") {				
+				tickmarks = true;
+				
+			}
 
 			var pc = new ParametricCurve(xInput, yInput, minT, maxT, segments, tickmarks, style);
 			scene.addObjects([ pc ]);
@@ -233,7 +235,33 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" ], (function($,
 
 		}));
 
+		$("#tickMarkBox").click(function () {
+			var t = this.minT;
+			var segmentDistance = Math.abs((this.maxT - this.minT)/this.segments);
+			for ( t = this.minT + segmentDistance; t <= this.maxT; t = t + segmentDistance) {
+				console.log("TEST");
+				// funX
+				var xPrev = x - segmentDistance;
+				var xNext = x + segmentDistance;
+				var diffX = (xNext - xPrev) / 2;
+				// funY
+				var yPrev = y - segmentDistance;
+				var yNext = y + segmentDistance;
+				var diffY = (yNext - yPrev) / 2;
+				
+				var line = new StraightLine([diffX - 1, diffY - 1], [diffX + 1, diffY + 1], this.lineStyle);
+				console.log("creating tick mark from [" + 
+						(diffX - 1) + "," + (diffY - 1) + "] to [" +
+						(diffX + 1) + "," + (diffY + 1) + "].");
+				
+				scene.addObjects([ line ]);
+				sceneController.deselect();
+				sceneController.select(line);
+			}
+		});
 	};
+	
+	
 
 	// return the constructor function
 	return HtmlController;
