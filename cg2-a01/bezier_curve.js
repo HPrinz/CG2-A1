@@ -9,43 +9,53 @@
  */
 
 /* requireJS module definition */
-define([ "util", "vec2", "scene", "straight_line" , "tickmarks" , "control_polygon"], (function(Util, vec2, Scene, StraightLine, Tickmarks, ControlPolygon) {
+define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon", "point_dragger" ], (function(Util, vec2, Scene, StraightLine, Tickmarks,
+		ControlPolygon, PointDragger) {
 
 	"use strict";
 
 	var BezierCurve = function(minT, maxT, point0, point1, point2, point3, segments, tickmarks, style) {
-		
-	    // draw style for drawing the line
-        this.lineStyle = style || { width: "2", color: "#0000AA" };
-        
-        // initial values in case either point is undefined
-		this.p0 = point0 || [100,100];
-	    this.p1 = point1 || [200, 100];
-	    this.p2 = point2 || [50, 300];
-        this.p3 = point3 || [300,100];
-		
+
+		// draw style for drawing the line
+		this.lineStyle = style || {
+			width : "2",
+			color : "#0000AA"
+		};
+
+		// initial values in case either point is undefined
+		this.p0 = point0 || [ 100, 100 ];
+		this.p1 = point1 || [ 200, 100 ];
+		this.p2 = point2 || [ 50, 300 ];
+		this.p3 = point3 || [ 300, 100 ];
+
 		this.funX = function(t) {
-			return (Math.pow((1 - t), 3) * this.p0[0]) + (3 * Math.pow((1 - t), 2) * t * this.p1[0]) + (3 * (1 - t) * Math.pow(t, 2) * this.p2[0]) + (Math.pow(t, 3) * this.p3[0]);
+			return (Math.pow((1 - t), 3) * this.p0[0]) + (3 * Math.pow((1 - t), 2) * t * this.p1[0])
+					+ (3 * (1 - t) * Math.pow(t, 2) * this.p2[0]) + (Math.pow(t, 3) * this.p3[0]);
 		};
 		this.funY = function(t) {
-			return (Math.pow((1 - t), 3) * this.p0[1]) + (3 * Math.pow((1 - t), 2) * t * this.p1[1]) + (3 * (1 - t) * Math.pow(t, 2) * this.p2[1]) + (Math.pow(t, 3) * this.p3[1]);
+			return (Math.pow((1 - t), 3) * this.p0[1]) + (3 * Math.pow((1 - t), 2) * t * this.p1[1])
+					+ (3 * (1 - t) * Math.pow(t, 2) * this.p2[1]) + (Math.pow(t, 3) * this.p3[1]);
 		};
-		
+
 		this.segments = segments || 5;
 		this.tickmarks = tickmarks;
 		this.minT = minT || 0;
 		this.maxT = maxT || Math.PI * 2;
-		
+
 		this.lines = [];
 
 		this.tArr = [];
-		
+
+	};
+
+	BezierCurve.prototype.setTickmarks = function(tick){
+		this.tickmarks = tick;
 	};
 	
 	/**
 	 * Draw this curve into the provided 2D rendering context
 	 */
-	BezierCurve.prototype.draw = function (context) {
+	BezierCurve.prototype.draw = function(context) {
 		// reset
 		this.tArr = [];
 
@@ -62,7 +72,7 @@ define([ "util", "vec2", "scene", "straight_line" , "tickmarks" , "control_polyg
 		// drawing all points
 		for ( var j = 0; j < this.tArr.length; j++) {
 
-//			 console.log("tArr = " + this.tArr);
+			// console.log("tArr = " + this.tArr);
 
 			// calculating new point
 			var t = this.tArr[j];
@@ -71,12 +81,10 @@ define([ "util", "vec2", "scene", "straight_line" , "tickmarks" , "control_polyg
 
 			// draw the line to it
 			context.lineTo(x, y);
-			console.log("darwing to " + x + "/" + y);
 
-			
 			// for isHit()
 			if (j != 0) {
-				
+
 				// calculate last point
 				t = this.tArr[j - 1];
 				var beforeX = this.funX(t);
@@ -94,7 +102,7 @@ define([ "util", "vec2", "scene", "straight_line" , "tickmarks" , "control_polyg
 		// actually start drawing
 		context.stroke();
 	};
-	
+
 	BezierCurve.prototype.isHit = function(context, mousePos) {
 		for ( var i = 0; i < this.lines.length; i++) {
 			var isHit = this.lines[i].isHit(context, mousePos);
@@ -105,13 +113,46 @@ define([ "util", "vec2", "scene", "straight_line" , "tickmarks" , "control_polyg
 		}
 
 		return false;
-	}; 
-	
+	};
+
 	BezierCurve.prototype.createDraggers = function() {
 
 		var draggers = [];
+
+		var curve = this;
 		
-		draggers.push(new ControlPolygon(this.p0, this.p1, this.p2, this.p3, this.lineStyle));
+		var getP0 = function() {
+			return curve.p0;
+		};
+		var getP1 = function() {
+			return curve.p1;
+		};
+		var getP2 = function() {
+			return curve.p2;
+		};
+		var getP3 = function() {
+			return curve.p3;
+		};
+		var setP0 = function(dragEvent) {
+			curve.p0 = dragEvent.position;
+		};
+		var setP1 = function(dragEvent) {
+			curve.p1 = dragEvent.position;
+		};
+		var setP2 = function(dragEvent) {
+			curve.p2 = dragEvent.position;
+		};
+		var setP3 = function(dragEvent) {
+			curve.p3 = dragEvent.position;
+		};
+
+		draggers.push(new PointDragger(getP0, setP0, curve.drawStyle));
+		draggers.push(new PointDragger(getP1, setP1, curve.drawStyle));
+		draggers.push(new PointDragger(getP2, setP2, curve.drawStyle));
+		draggers.push(new PointDragger(getP3, setP3, curve.drawStyle));
+		
+		draggers.push(new ControlPolygon(getP0(), getP1(), getP2(), getP3(), this.lineStyle));
+		
 
 		// set tickmarks if its set and if we are not at the first or last point
 		if (this.tickmarks) {
@@ -156,5 +197,5 @@ define([ "util", "vec2", "scene", "straight_line" , "tickmarks" , "control_polyg
 		return draggers;
 	};
 	return BezierCurve;
-	
+
 })); // end define

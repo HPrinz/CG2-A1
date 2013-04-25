@@ -189,7 +189,6 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 
 			scene.clear();
 			sceneController.deselect();
-			sceneController.select();
 			
 		}));
 		

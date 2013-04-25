@@ -23,6 +23,8 @@ define([ "util", "scene" ], (function(Util, Scene) {
 
 	var ControlPolygon = function(p0, p1, p2, p3, drawStyle) {
 
+		console.log("new ControlPolygon")
+		
 		// remember the callbacks
 		this.p0 = p0;
 		this.p1 = p1;
