@@ -205,7 +205,6 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 				width : Math.floor(Math.random() * 20) + 1,
 				color : randomColor()
 			};
-
 			
 			var xInput = $("#xInput").attr("value");
 			var yInput = $("#yInput").attr("value");
@@ -224,29 +223,23 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 
 			// if the checkbox is checked, the attribute checked will be "checked" else the attribute will be undefined
 			if ($("#tickMarkBox").attr("checked") == "checked") {				
-				tickmarks = true;
-				
+				tickmarks = true;				
 			}
 
 			var pc = new ParametricCurve(xInput, yInput, minT, maxT, segments, tickmarks, style);
 			scene.addObjects([ pc ]);
 			sceneController.deselect();
 			sceneController.select(pc);
-
 		}));
-
 		
-		$("#btnNewBezier").click(function() {
+		
+		$("#btnNewBezier").click((function() {
 			console.log("new Bezier curve");
-
-			var style = {
-				width : Math.floor(Math.random() * 20) + 1,
-				color : randomColor()
-			};
+			
 			var minT = parseFloat($("#minTInput").attr("value"));
 			var maxT = parseFloat($("#maxTInput").attr("value"));
+			var randomPoint = [randomX(), randomY()];
 			var segments = parseInt($("#segmentsInput").attr("value"));
-			var randomPoint = [ randomX(), randomY() ];
 			
 			if (maxT <= minT){
 				var temp = minT;
@@ -256,20 +249,26 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 				$("#maxTInput").attr("value", maxT);
 			}	
 			var tickmarks = false;
-
+			
 			// if the checkbox is checked, the attribute checked will be "checked" else the attribute will be undefined
 			if ($("#tickMarkBox").attr("checked") == "checked") {				
 				tickmarks = true;			
 			}
 			
-			var bezierCurve = new BezierCurve(minT, maxT, randomPoint, randomPoint, randomPoint, randomPoint, segments, tickmarks, style);
-			scene.addObjects([ bezierCurve ]);
+			var style = {
+					width : Math.floor(Math.random() * 20) + 1,
+					color : randomColor()
+			};
+			
+//			var bc = new BezierCurve(minT, maxT, randomPoint, randomPoint, randomPoint, randomPoint, segments, tickmarks, style);
+			var bc = new BezierCurve(0, 5, [-1, 0], [0,1], [0,-1], [1,0], 10, false, style);
+
+			console.log("Bezier curve: " + bc);
+			scene.addObjects([ bc ]);
 			sceneController.deselect();
-			sceneController.select(bezierCurve);
-		});
+			sceneController.select(bc);
+		}));
 	};
-	
-	
 
 	// return the constructor function
 	return HtmlController;
