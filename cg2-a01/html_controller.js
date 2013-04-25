@@ -157,10 +157,8 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 		 * event handler for line width-Change.
 		 */
 		$("#lineWidth").change((function() {
-			console.log("line should change");
 			var obj = sceneController.getSelectedObject();
 			if (obj instanceof Circle || obj instanceof StraightLine || obj instanceof ParametricCurve) {
-				console.log("Linienbreite ist " + $("#lineWidth").attr("value"));
 				obj.setLineWidth($("#lineWidth").attr("value"));
 				sceneController.deselect();
 				sceneController.select(obj); // this will also redraw
@@ -223,9 +221,8 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			var tickmarks = false;
 
 			// if the checkbox is checked, the attribute checked will be "checked" else the attribute will be undefined
-			if ($("#tickMarkBox").attr("checked") == "checked") {				
+			if ($("#tickMarkBox").attr("checked") === "checked") {				
 				tickmarks = true;
-				
 			}
 
 			var pc = new ParametricCurve(xInput, yInput, minT, maxT, segments, tickmarks, style);
@@ -233,6 +230,21 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			sceneController.deselect();
 			sceneController.select(pc);
 
+		}));
+		
+		$("#tickMarkBox").change((function() {
+			var obj = sceneController.getSelectedObject();
+			if (obj instanceof ParametricCurve || obj instanceof BezierCurve) {
+				// PARSEINT! Sonst werden die Werte von Circle.center[] und Circle.radius einfach aneinandergereiht. Also statt 2+2= 4 dann 2+"2" = 22
+				if ($("#tickMarkBox").attr("checked") == "checked"){
+					obj.setTickmarks(true);
+				}else{
+					obj.setTickmarks(false);
+				}
+				sceneController.deselect();
+				sceneController.select(obj); // this will
+				// also redraw
+			}
 		}));
 
 		

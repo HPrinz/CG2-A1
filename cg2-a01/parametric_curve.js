@@ -44,6 +44,10 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 		this.tArr = [];
 	};
 
+	ParametricCurve.prototype.setTickmarks = function(tick){
+		this.tickmarks = tick;
+	};
+	
 	/**
 	 * Draw this line into the provided 2D rendering context
 	 */
@@ -112,6 +116,8 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 
 		return false;
 	};
+	
+	
 
 	/**
 	 * Return list of draggers to manipulate this line. we have 1 PointDragger and 1 RadiusDragger for each
