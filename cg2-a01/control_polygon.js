@@ -30,14 +30,14 @@ define([ "util", "scene" ], (function(Util, Scene) {
 		this.p3 = p3;
 
 		// default draw style
-		this.drawStyle = drawStyle || {
+		this.drawStyle = {
 			radius : 5,
 			width : 2,
 			color : "#ff0000",
 			fill : false
 		};
 
-		this.drawstyle.color = "#ff0000";
+		this.drawStyle.color = "#ff0000";
 
 		// attribute queried by SceneController to recognize draggers
 		this.isDragger = true;

@@ -248,24 +248,18 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 		$("#btnNewBezier").click((function() {
 			console.log("new Bezier curve");
 			
-			var minT = parseFloat($("#minTInput").attr("value"));
-			var maxT = parseFloat($("#maxTInput").attr("value"));
-			var randomPoint = [randomX(), randomY()];
 			var segments = parseInt($("#segmentsInput").attr("value"));
-			
-			if (maxT <= minT){
-				var temp = minT;
-				minT = maxT;
-				maxT = temp;
-				$("#minTInput").attr("value", minT);
-				$("#maxTInput").attr("value", maxT);
-			}	
-			var tickmarks = false;
-			
+
+			var tickmarks = false;			
 			// if the checkbox is checked, the attribute checked will be "checked" else the attribute will be undefined
 			if ($("#tickMarkBox").attr("checked") == "checked") {				
 				tickmarks = true;			
 			}
+			
+			var p0 = [parseInt($("#p0x").val()), parseInt($("#p0y").val())];
+			var p1 = [parseInt($("#p1x").val()), parseInt($("#p1y").val())];
+			var p2 = [parseInt($("#p2x").val()), parseInt($("#p2y").val())];
+			var p3 = [parseInt($("#p3x").val()), parseInt($("#p3y").val())];
 			
 			var style = {
 					width : Math.floor(Math.random() * 20) + 1,
@@ -273,7 +267,7 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			};
 			
 //			var bc = new BezierCurve(minT, maxT, randomPoint, randomPoint, randomPoint, randomPoint, segments, tickmarks, style);
-			var bc = new BezierCurve(0, 5, [-1, 0], [0,1], [0,-1], [1,0], segments, tickmarks, style);
+			var bc = new BezierCurve(0, 1, p0, p1, p2, p3, segments, tickmarks, style);
 
 			console.log("Bezier curve: " + bc);
 			scene.addObjects([ bc ]);

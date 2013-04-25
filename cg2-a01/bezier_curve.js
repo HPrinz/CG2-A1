@@ -9,7 +9,7 @@
  */
 
 /* requireJS module definition */
-define([ "util", "vec2", "scene", "straight_line" , "tickmarks" ,"parametric_curve"], (function(Util, vec2, Scene, StraightLine, Tickmarks, ParametricCurve) {
+define([ "util", "vec2", "scene", "straight_line" , "tickmarks" , "control_polygon"], (function(Util, vec2, Scene, StraightLine, Tickmarks, ControlPolygon) {
 
 	"use strict";
 
@@ -19,14 +19,17 @@ define([ "util", "vec2", "scene", "straight_line" , "tickmarks" ,"parametric_cur
         this.lineStyle = style || { width: "2", color: "#0000AA" };
         
         // initial values in case either point is undefined
-		this.p0 = point0 || [-1,0];
-	    this.p1 = point1 || [0,1];
-	    this.p2 = point2 || [0,-1];
-        this.p3 = point3 || [1,0];
-        var t = minT;
+		this.p0 = point0 || [100,100];
+	    this.p1 = point1 || [200, 100];
+	    this.p2 = point2 || [50, 300];
+        this.p3 = point3 || [300,100];
 		
-		this.funX = Math.pow((1 - t), 3) * this.p0[0] + 3 * Math.pow(1 - t, 2) * t * this.p1[0] + 3 * (1 - t) * Math.pow(t, 2) * this.p2[0] + Math.pow(t, 3) * this.p3[0];
-		this.funY = Math.pow((1 - t), 3) * this.p0[1] + 3 * Math.pow(1 - t, 2) * t * this.p1[1] + 3 * (1 - t) * Math.pow(t, 2) * this.p2[1] + Math.pow(t, 3) * this.p3[1];
+		this.funX = function(t) {
+			return (Math.pow((1 - t), 3) * this.p0[0]) + (3 * Math.pow((1 - t), 2) * t * this.p1[0]) + (3 * (1 - t) * Math.pow(t, 2) * this.p2[0]) + (Math.pow(t, 3) * this.p3[0]);
+		};
+		this.funY = function(t) {
+			return (Math.pow((1 - t), 3) * this.p0[1]) + (3 * Math.pow((1 - t), 2) * t * this.p1[1]) + (3 * (1 - t) * Math.pow(t, 2) * this.p2[1]) + (Math.pow(t, 3) * this.p3[1]);
+		};
 		
 		this.segments = segments || 5;
 		this.tickmarks = tickmarks;
@@ -59,23 +62,25 @@ define([ "util", "vec2", "scene", "straight_line" , "tickmarks" ,"parametric_cur
 		// drawing all points
 		for ( var j = 0; j < this.tArr.length; j++) {
 
-			// console.log("tArr = " + this.tArr);
+//			 console.log("tArr = " + this.tArr);
 
 			// calculating new point
 			var t = this.tArr[j];
-			var x = eval(this.funX);
-			var y = eval(this.funY);
+			var x = this.funX(t);
+			var y = this.funY(t);
 
 			// draw the line to it
 			context.lineTo(x, y);
+			console.log("darwing to " + x + "/" + y);
 
+			
 			// for isHit()
 			if (j != 0) {
 				
 				// calculate last point
 				t = this.tArr[j - 1];
-				var beforeX = eval(this.funX);
-				var beforeY = eval(this.funY);
+				var beforeX = this.funX(t);
+				var beforeY = this.funY(t);
 
 				// save as StraightLine for the isHit()-function without drawing the line!
 				var line = new StraightLine([ beforeX, beforeY ], [ x, y ], this.lineStyle);
@@ -105,6 +110,8 @@ define([ "util", "vec2", "scene", "straight_line" , "tickmarks" ,"parametric_cur
 	BezierCurve.prototype.createDraggers = function() {
 
 		var draggers = [];
+		
+		draggers.push(new ControlPolygon(this.p0, this.p1, this.p2, this.p3, this.lineStyle));
 
 		// set tickmarks if its set and if we are not at the first or last point
 		if (this.tickmarks) {
@@ -112,18 +119,18 @@ define([ "util", "vec2", "scene", "straight_line" , "tickmarks" ,"parametric_cur
 
 				// calculate current point
 				var t = this.tArr[j];
-				var x = eval(this.funX);
-				var y = eval(this.funY);
+				var x = this.funX(t);
+				var y = this.funY(t);
 
 				// calculate last point
 				t = this.tArr[j - 1];
-				var beforeX = eval(this.funX);
-				var beforeY = eval(this.funY);
+				var beforeX = this.funX(t);
+				var beforeY = this.funY(t);
 
 				// calculate next point
 				t = this.tArr[j + 1];
-				var afterX = eval(this.funX);
-				var afterY = eval(this.funY);
+				var afterX = this.funX(t);
+				var afterY = this.funY(t);
 
 				// tangente von x = PunktDanach - PunktDavor / n (zum Kürzen)
 				var tangenteX = (afterX - beforeX) / 8;
