@@ -26,10 +26,6 @@ define([ "util", "scene" ], (function(Util, Scene) {
 		console.log("new ControlPolygon")
 		
 		// remember the callbacks
-//		this.p0 = p0;
-//		this.p1 = p1;
-//		this.p2 = p2;
-//		this.p3 = p3;
 		this.getP0 = getP0;
 		this.setP0 = setP0;
 		this.getP1 = getP1;
@@ -57,22 +53,17 @@ define([ "util", "scene" ], (function(Util, Scene) {
 	/*
 	 * draw the polygon as four lines
 	 */
-	ControlPolygon.prototype.draw = function(context) {
-
-		// what shape to draw
-//		context.beginPath();
-//		context.lineTo(this.p0[0], this.p0[1]);
-//		context.lineTo(this.p1[0], this.p1[1]);
-//		context.lineTo(this.p2[0], this.p2[1]);
-//		context.lineTo(this.p3[0], this.p3[1]);
+	ControlPolygon.prototype.draw = function(context) {		
 		
+		// what are my current positions?
 		var p0 = this.getP0();
 		var p1 = this.getP1();
 		var p2 = this.getP2();
 		var p3 = this.getP3();
 
-		console.log("p0 = " + p0 + ", p1 = " + p1+ ", p2 = " + p2 + ", p3 = " + p3);
+//		console.log("p0 = " + p0 + ", p1 = " + p1+ ", p2 = " + p2 + ", p3 = " + p3);
 		
+		// what shape to draw
 		context.beginPath();
 		context.lineTo(p0[0], p0[1]);
 		context.lineTo(p1[0], p1[1]);
@@ -91,7 +82,7 @@ define([ "util", "scene" ], (function(Util, Scene) {
      */
 	ControlPolygon.prototype.isHit = function (context,mousePos) {
     
-        // what is my current position?
+		// what are my current positions?
 		var p0 = this.getP0();
 		var p1 = this.getP1();
 		var p2 = this.getP2();
