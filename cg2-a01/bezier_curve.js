@@ -154,7 +154,7 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 		draggers.push(new PointDragger(getP2, setP2, curve.drawStyle));
 		draggers.push(new PointDragger(getP3, setP3, curve.drawStyle));
 		
-		draggers.push(new ControlPolygon(getP0, getP1, getP2, getP3,  setP0, setP1, setP2, setP3, this.lineStyle));
+		draggers.push(new ControlPolygon(getP0, getP1, getP2, getP3,  setP0, this.lineStyle));
 		
 
 		// set tickmarks if its set and if we are not at the first or last point
