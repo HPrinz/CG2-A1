@@ -58,6 +58,10 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			else if (obj instanceof ParametricCurve){
 				$("#colorInput").attr("value", obj.lines[0].getLineColor());
 				$("#lineWidth").attr("value", Math.floor(obj.lines[0].getLineWidth()));
+			} 
+			else if (obj instanceof BezierCurve){
+				$("#colorInput").attr("value", obj.getLineColor());
+				$("#lineWidth").attr("value", Math.floor(obj.getLineWidth()));
 			}
 		};
 
@@ -145,7 +149,7 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 		$("#colorInput").change((function() {
 			console.log("color should change");
 			var obj = sceneController.getSelectedObject();
-			if (obj instanceof Circle || obj instanceof StraightLine|| obj instanceof ParametricCurve) {
+			if (obj instanceof Circle || obj instanceof StraightLine|| obj instanceof ParametricCurve || obj instanceof BezierCurve) {
 				console.log("Farbe ist " + $("#colorInput").attr("value"));
 				obj.setLineColor($("#colorInput").attr("value"));
 				sceneController.deselect();
@@ -158,7 +162,7 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 		 */
 		$("#lineWidth").change((function() {
 			var obj = sceneController.getSelectedObject();
-			if (obj instanceof Circle || obj instanceof StraightLine || obj instanceof ParametricCurve) {
+			if (obj instanceof Circle || obj instanceof StraightLine || obj instanceof ParametricCurve || obj instanceof BezierCurve) {
 				obj.setLineWidth($("#lineWidth").attr("value"));
 				sceneController.deselect();
 				sceneController.select(obj); // this will also redraw

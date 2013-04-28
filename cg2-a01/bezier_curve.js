@@ -115,6 +115,9 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 		return false;
 	};
 
+	/**
+	 * Return list of draggers to manipulate this line. we have 4 PointDragger, 1 ControlPolygon and Tickmarks for each bézier curve.
+     */
 	BezierCurve.prototype.createDraggers = function() {
 
 		var draggers = [];
@@ -151,7 +154,7 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 		draggers.push(new PointDragger(getP2, setP2, curve.drawStyle));
 		draggers.push(new PointDragger(getP3, setP3, curve.drawStyle));
 		
-		draggers.push(new ControlPolygon(getP0(), getP1(), getP2(), getP3(), this.lineStyle));
+		draggers.push(new ControlPolygon(getP0, getP1, getP2, getP3,  setP0, setP1, setP2, setP3, this.lineStyle));
 		
 
 		// set tickmarks if its set and if we are not at the first or last point
@@ -196,6 +199,23 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 
 		return draggers;
 	};
+	
+	BezierCurve.prototype.getLineColor = function(){
+		return this.lineStyle.color;
+	};
+	
+	BezierCurve.prototype.setLineColor = function(colorValue) {
+		this.lineStyle.color = colorValue;
+	};
+	
+	BezierCurve.prototype.getLineWidth = function(){
+		return this.lineStyle.width;
+	};
+	
+	BezierCurve.prototype.setLineWidth = function(widthValue) {
+		this.lineStyle.width = widthValue;
+	};
+	
 	return BezierCurve;
 
 })); // end define
