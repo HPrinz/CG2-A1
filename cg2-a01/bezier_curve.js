@@ -101,6 +101,10 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 
 		// actually start drawing
 		context.stroke();
+		
+		 for ( var j = 0; j < this.marks.length; j++){
+		 this.marks[j].draw(context);
+		 }
 	};
 
 	BezierCurve.prototype.isHit = function(context, mousePos) {
@@ -188,12 +192,7 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 				var pointOverCurve = [ x + normaleX, y + normaleY ];
 				var pointUnderCurve = [ x - normaleX, y - normaleY ];
 
-				var mark = new StraightLine(pointOverCurve, pointUnderCurve, {
-					width : "1",
-					color : "#DF013A"
-				});
-
-				draggers.push(new Tickmarks(mark));
+				draggers.push(new Tickmarks(pointOverCurve, pointUnderCurve));
 			}
 		}
 

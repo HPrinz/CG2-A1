@@ -21,10 +21,16 @@ define([ "util", "scene", "straight_line" ], (function(Util, Scene, StraightLine
 	 * 
 	 */
 
-	var Tickmarks = function(straightLine) {
+	var Tickmarks = function(pointOverCurve, pointUnderCurve) {
 
 		// remember the callbacks
-		this.straightLine = straightLine;
+		this.pointOverCurve = pointOverCurve;
+		this.pointUnderCurve = pointUnderCurve;
+		
+		this.straightLine = new StraightLine(pointOverCurve, pointUnderCurve, {
+			width : "1",
+			color : "#DF013A"
+		});
 //		straightLine.lineStyle.width = "2";
 		
 		// attribute queried by SceneController to recognize draggers
@@ -35,8 +41,15 @@ define([ "util", "scene", "straight_line" ], (function(Util, Scene, StraightLine
 	/*
 	 * draw the polygon as four lines
 	 */
-	Tickmarks.prototype.draw = function(context) {
+	Tickmarks.prototype.draw = function(context, pointOverCurve, pointUnderCurve) {
 
+		this.pointOverCurve = pointOverCurve;
+		this.pointUnderCurve = pointUnderCurve;
+		this.straightLine = new StraightLine(pointOverCurve, pointUnderCurve, {
+			width : "1",
+			color : "#DF013A"
+		});
+		
 		this.straightLine.draw(context);
 	};
 

@@ -52,6 +52,8 @@ define(["util", "vec2", "scene", "point_dragger"],
         context.moveTo(this.p0[0],this.p0[1]);
         context.lineTo(this.p1[0],this.p1[1]);
         
+        console.log("creating straight line from [" + this.p0[0] + "," + this.p0[1] + "] to [" + this.p1[0] + "," + this.p1[1] + "].");
+        
         // set drawing style
         context.lineWidth = this.lineStyle.width;
         context.strokeStyle = this.lineStyle.color;
