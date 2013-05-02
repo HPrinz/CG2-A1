@@ -207,8 +207,14 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 				color : randomColor()
 			};
 			
-			var xInput = $("#xInput").attr("value");
-			var yInput = $("#yInput").attr("value");
+			var xInput = function(t){
+				return eval($("#xInput").attr("value"));
+			};
+			var yInput = function(t){
+				return eval($("#yInput").attr("value"));
+			};
+			
+			
 			var minT = parseFloat($("#minTInput").attr("value"));
 			var maxT = parseFloat($("#maxTInput").attr("value"));
 			var segments = parseInt($("#segmentsInput").attr("value"));
@@ -247,6 +253,43 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			}
 		}));
 		
+		
+		$("#xInput").change((function() {
+			var obj = sceneController.getSelectedObject();
+			if (obj instanceof ParametricCurve){
+				obj.setXInput($("#xInput").val());
+				sceneController.deselect();
+				sceneController.select(obj);
+			}
+		}));
+
+		$("#yInput").change((function() {
+			var obj = sceneController.getSelectedObject();
+			if (obj instanceof ParametricCurve){
+				obj.setYInput($("#YInput").val());
+				sceneController.deselect();
+				sceneController.select(obj);
+			}
+		}));
+		
+		$("#minTInput").change((function() {
+			var obj = sceneController.getSelectedObject();
+			if (obj instanceof ParametricCurve){
+				obj.minT = ($("#minTInput").val());
+				sceneController.deselect();
+				sceneController.select(obj);
+			}
+		}));
+		
+		$("#maxTInput").change((function() {
+			var obj = sceneController.getSelectedObject();
+			if (obj instanceof ParametricCurve){
+				obj.maxT = ($("#maxTInput").val());
+				sceneController.deselect();
+				sceneController.select(obj);
+			}
+		}));
+
 		
 		$("#btnNewBezier").click((function() {
 			console.log("new Bezier curve");

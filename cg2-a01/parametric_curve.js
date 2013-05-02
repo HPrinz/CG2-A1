@@ -33,8 +33,8 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 		};
 
 		// convert to Vec2 just in case the points were given as arrays
-		this.funX = funX || 1;
-		this.funY = funY || 5;
+		this.funX = funX ;
+		this.funY = funY ;
 		this.minT = minT || 0;
 		this.maxT = maxT || 1;
 		this.segments = segments || 5;
@@ -43,6 +43,7 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 		this.marks = [];
 		this.tArr = [];
 	};
+	
 
 	ParametricCurve.prototype.setTickmarks = function(tick) {
 		this.tickmarks = tick;
@@ -71,20 +72,22 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 
 			// calculating new point
 			var t = this.tArr[j];
-			var x = eval(this.funX);
-			var y = eval(this.funY);
+			var x = this.funX(t);
+			var y = this.funY(t);
 
 			if (j != 0) {
 
 				// calculate last point
 				t = this.tArr[j - 1];
-				var beforeX = eval(this.funX);
-				var beforeY = eval(this.funY);
+				var beforeX = this.funX(t);
+				var beforeY = this.funY(t);
 
 				// save as StraightLine for the isHit()-function without drawing the line!
 //				console.log(x, y, beforeX, beforeY);
 				var line = new StraightLine([ beforeX, beforeY ], [ x, y ], this.lineStyle);
 				line.draw(context);
+				
+				console.log("X = " + this.funX + "drawing Line To: " + x + "/" + y);
 				
 				this.lines.push(line);
 
@@ -93,8 +96,8 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 					if (j <= this.tArr.length - 2) {
 						// calculate next point
 						t = this.tArr[j + 1];
-						var afterX = eval(this.funX);
-						var afterY = eval(this.funY);
+						var afterX = this.funX(t);
+						var afterY = this.funY(t);
 						
 						// tangente von x = PunktDanach - PunktDavor / n (zum Kürzen)
 						var tangenteX = (afterX - beforeX) / 10;
@@ -168,14 +171,22 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 	ParametricCurve.prototype.setLineWidth = function(widthValue) {
 		this.lineStyle.width = widthValue;
 	};
-
-	ParametricCurve.prototype.getRadius = function() {
-		return this.radius;
+	ParametricCurve.prototype.getXInput = function() {
+		return this.funX;
 	};
 
-	ParametricCurve.prototype.setNewRadius = function(newRadius) {
-		this.radius = newRadius;
+	ParametricCurve.prototype.setXInput = function(value) {
+		this.funX = value;
 	};
+	
+	ParametricCurve.prototype.getYInput = function() {
+		return this.funY;
+	};
+
+	ParametricCurve.prototype.setYInput = function(value) {
+		this.funY = value;
+	};
+
 
 	// this module only exports the constructor for ParametricCurve objects
 	return ParametricCurve;
