@@ -82,7 +82,7 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 				var beforeY = eval(this.funY);
 
 				// save as StraightLine for the isHit()-function without drawing the line!
-				console.log(x, y, beforeX, beforeY);
+//				console.log(x, y, beforeX, beforeY);
 				var line = new StraightLine([ beforeX, beforeY ], [ x, y ], this.lineStyle);
 				line.draw(context);
 				

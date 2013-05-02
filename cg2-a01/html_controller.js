@@ -259,6 +259,12 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 				tickmarks = true;			
 			}
 			
+			var deCasteljau = false;			
+			// if the checkbox is checked, the attribute checked will be "checked" else the attribute will be undefined
+			if ($("#deCasteljau").attr("checked") == "checked") {				
+				deCasteljau = true;			
+			}
+			
 			var p0 = [parseInt($("#p0x").val()), parseInt($("#p0y").val())];
 			var p1 = [parseInt($("#p1x").val()), parseInt($("#p1y").val())];
 			var p2 = [parseInt($("#p2x").val()), parseInt($("#p2y").val())];
