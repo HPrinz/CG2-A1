@@ -28,13 +28,15 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 		this.p2 = point2 || [ 50, 300 ];
 		this.p3 = point3 || [ 300, 100 ];
 
+		var bezier = this;
+		
 		this.funX = function(t) {
-			return (Math.pow((1 - t), 3) * point0[0]) + (3 * Math.pow((1 - t), 2) * t * point1[0])
-					+ (3 * (1 - t) * Math.pow(t, 2) * point2[0]) + (Math.pow(t, 3) * point3[0]);
+			return (Math.pow((1 - t), 3) * bezier.p0[0]) + (3 * Math.pow((1 - t), 2) * t * bezier.p1[0])
+					+ (3 * (1 - t) * Math.pow(t, 2) * bezier.p2[0]) + (Math.pow(t, 3) * bezier.p3[0]);
 		};
 		this.funY = function(t) {
-			return (Math.pow((1 - t), 3) * point0[1]) + (3 * Math.pow((1 - t), 2) * t * point1[1])
-					+ (3 * (1 - t) * Math.pow(t, 2) * point2[1]) + (Math.pow(t, 3) * point3[1]);
+			return (Math.pow((1 - t), 3) * bezier.p0[1]) + (3 * Math.pow((1 - t), 2) * t * bezier.p1[1])
+					+ (3 * (1 - t) * Math.pow(t, 2) * bezier.p2[1]) + (Math.pow(t, 3) * bezier.p3[1]);
 		};
 
 		this.segments = segments || 5;
@@ -78,7 +80,7 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 	 * Return list of draggers to manipulate this line. we have 4 PointDragger, 1 ControlPolygon and Tickmarks for each bézier curve.
      */
 	BezierCurve.prototype.createDraggers = function() {
-
+		
 		var draggers = [];
 		
 		var bezier = this;
@@ -96,7 +98,6 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 			return bezier.p3;
 		};
 		var setP0 = function(dragEvent) {
-			console.log("bezier: " + bezier.p0 + "/" + bezier.p1);
 			bezier.p0 = dragEvent.position;
 		};
 		var setP1 = function(dragEvent) {
@@ -114,7 +115,7 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 		draggers.push(new PointDragger(getP2, setP2, bezier.drawStyle));
 		draggers.push(new PointDragger(getP3, setP3, bezier.drawStyle));
 		
-		draggers.push(new ControlPolygon(getP0, getP1, getP2, getP3,  setP0, setP1, setP2, setP3, this.curve.lineStyle));
+		draggers.push(new ControlPolygon(getP0, getP1, getP2, getP3, this.curve.lineStyle));
 		
 		
 		if(this.deCasteljau) {
