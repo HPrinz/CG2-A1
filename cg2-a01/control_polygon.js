@@ -7,7 +7,7 @@
  */
 
 /* requireJS module definition */
-define([ "util", "scene" ], (function(Util, Scene) {
+define([ "util", "scene" , "straight_line" , "point_dragger" ], (function(Util, Scene, StraightLine, PointDragger) {
 
 	"use strict";
 
@@ -21,7 +21,7 @@ define([ "util", "scene" ], (function(Util, Scene) {
 	 * 
 	 */
 
-	var ControlPolygon = function(getP0, getP1, getP2, getP3, setPos0, setPos1, setPos2, setPos3, drawStyle) {
+	var ControlPolygon = function(getP0, getP1, getP2, getP3, drawStyle) {
 
 		console.log("new ControlPolygon");
 		
@@ -30,12 +30,6 @@ define([ "util", "scene" ], (function(Util, Scene) {
 		this.getP1 = getP1;
 		this.getP2 = getP2;
 		this.getP3 = getP3;
-
-		this.setPos0 = setPos0;
-		this.setPos1 = setPos1;
-		this.setPos2 = setPos2;
-		this.setPos3 = setPos3;
-		
 		
 		// default draw style
 		this.drawStyle = {
@@ -49,7 +43,6 @@ define([ "util", "scene" ], (function(Util, Scene) {
 
 		// attribute queried by SceneController to recognize draggers
 		this.isDragger = true;
-
 	};
 
 	/*
@@ -57,71 +50,15 @@ define([ "util", "scene" ], (function(Util, Scene) {
 	 */
 	ControlPolygon.prototype.draw = function(context) {		
 		
-		// what are my current positions?
-		var p0 = this.getP0();
-		var p1 = this.getP1();
-		var p2 = this.getP2();
-		var p3 = this.getP3();
-
-//		console.log("p0 = " + p0 + ", p1 = " + p1+ ", p2 = " + p2 + ", p3 = " + p3);
-		
-		// what shape to draw
-		context.beginPath();
-		context.lineTo(p0[0], p0[1]);
-		context.lineTo(p1[0], p1[1]);
-		context.lineTo(p2[0], p2[1]);
-		context.lineTo(p3[0], p3[1]);
-		
-		// draw style
-		context.lineWidth = this.drawStyle.width;
-		context.strokeStyle = this.drawStyle.color;
-
-		context.stroke();
+		new StraightLine(this.getP0(), this.getP1(), this.drawStyle).draw(context);
+		new StraightLine(this.getP1(), this.getP2(), this.drawStyle).draw(context);
+		new StraightLine(this.getP2(), this.getP3(), this.drawStyle).draw(context);
 	};
 	
 	/* 
      * test whether the specified mouse position "hits" this dragger
      */
-	ControlPolygon.prototype.isHit = function (context,mousePos) {
-    
-		// what are my current positions?
-		var p0 = this.getP0();
-		var p1 = this.getP1();
-		var p2 = this.getP2();
-		var p3 = this.getP3();
-    
-        // check whether distance between mouse and dragger's center
-        // is at max (radius+1) 
-        var dx0 = mousePos[0] - p0[0];
-        var dy0 = mousePos[1] - p0[1];
-        var r0 = this.drawStyle.radius+1;
-        return (dx0*dx0 + dy0*dy0) <= (r0*r0);   
-        
-        var dx1 = mousePos[0] - p1[0];
-        var dy1 = mousePos[1] - p1[1];
-        var r1 = this.drawStyle.radius+1;
-        return (dx1*dx1 + dy1*dy1) <= (r1*r1);   
-        
-        var dx2 = mousePos[0] - p2[0];
-        var dy2 = mousePos[1] - p2[1];
-        var r2 = this.drawStyle.radius+1;
-        return (dx2*dx2 + dy2*dy2) <= (r2*r2);   
-        
-        var dx3 = mousePos[0] - p3[0];
-        var dy3 = mousePos[1] - p3[1];
-        var r3 = this.drawStyle.radius+1;
-        return (dx3*dx3 + dy3*dy3) <= (r3*r3);   
-    };
-        
-    /*
-     * Event handler triggered by a SceneController when mouse
-     * is being dragged
-     */
-    ControlPolygon.prototype.mouseDrag = function (dragEvent) {
-    
-        // change position of the associated original (!) object
-        this.setPos(dragEvent);
-//        console.log("setPos: " + this.setPos(dragEvent));
+	ControlPolygon.prototype.isHit = function (context,mousePos) {    
     };
 
 	// this module exposes only the constructor for Dragger objects
