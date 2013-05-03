@@ -29,12 +29,12 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 		this.p3 = point3 || [ 300, 100 ];
 
 		this.funX = function(t) {
-			return (Math.pow((1 - t), 3) * p0[0]) + (3 * Math.pow((1 - t), 2) * t * this.p1[0])
-					+ (3 * (1 - t) * Math.pow(t, 2) * this.p2[0]) + (Math.pow(t, 3) * this.p3[0]);
+			return (Math.pow((1 - t), 3) * point0[0]) + (3 * Math.pow((1 - t), 2) * t * point1[0])
+					+ (3 * (1 - t) * Math.pow(t, 2) * point2[0]) + (Math.pow(t, 3) * point3[0]);
 		};
 		this.funY = function(t) {
-			return (Math.pow((1 - t), 3) * this.p0[1]) + (3 * Math.pow((1 - t), 2) * t * this.p1[1])
-					+ (3 * (1 - t) * Math.pow(t, 2) * this.p2[1]) + (Math.pow(t, 3) * this.p3[1]);
+			return (Math.pow((1 - t), 3) * point0[1]) + (3 * Math.pow((1 - t), 2) * t * point1[1])
+					+ (3 * (1 - t) * Math.pow(t, 2) * point2[1]) + (Math.pow(t, 3) * point3[1]);
 		};
 
 		this.segments = segments || 5;
@@ -60,53 +60,6 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 	 */
 	BezierCurve.prototype.draw = function(context) {
 		this.curve.draw(context);
-//		// reset
-//		this.tArr = [];
-//
-//		var segmentDistance = Math.abs((this.maxT - this.minT) / this.segments);
-//
-//		// draw actual line
-//		context.beginPath();
-//
-//		// calculating all t's
-//		for ( var i = 0; i <= this.segments; i++) {
-//			this.tArr.push(this.minT + (i * segmentDistance));
-//		}
-//
-//		// drawing all points
-//		for ( var j = 0; j < this.tArr.length; j++) {
-//
-//			// calculating new point
-//			var t = this.tArr[j];
-//			var x = this.funX(t);
-//			var y = this.funY(t);
-//
-//			// draw the line to it
-//			context.lineTo(x, y);
-//
-//			// for isHit()
-//			if (j != 0) {
-//
-//				// calculate last point
-//				t = this.tArr[j - 1];
-//				var beforeX = this.funX(t);
-//				var beforeY = this.funY(t);
-//
-//				// save as StraightLine for the isHit()-function without drawing the line!
-//				var line = new StraightLine([ beforeX, beforeY ], [ x, y ], this.lineStyle);
-//				this.lines.push(line);
-//			}
-//		}
-//
-//		context.lineWidth = this.lineStyle.width;
-//		context.strokeStyle = this.lineStyle.color;
-//
-//		// actually start drawing
-//		context.stroke();
-//		
-////		 for ( var j = 0; j < this.marks.length; j++){
-////		 this.marks[j].draw(context);
-////		 }
 	};
 
 	BezierCurve.prototype.isHit = function(context, mousePos) {
@@ -128,73 +81,41 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 
 		var draggers = [];
 		
+		var bezier = this;
+		
 		var getP0 = function() {
-			return this.p0;
+			return bezier.p0;
 		};
 		var getP1 = function() {
-			return this.p1;
+			return bezier.p1;
 		};
 		var getP2 = function() {
-			return this.p2;
+			return bezier.p2;
 		};
 		var getP3 = function() {
-			return this.p3;
+			return bezier.p3;
 		};
 		var setP0 = function(dragEvent) {
-			this.p0 = dragEvent.position;
+			console.log("bezier: " + bezier.p0 + "/" + bezier.p1);
+			bezier.p0 = dragEvent.position;
 		};
 		var setP1 = function(dragEvent) {
-			this.p1 = dragEvent.position;
+			bezier.p1 = dragEvent.position;
 		};
 		var setP2 = function(dragEvent) {
-			this.p2 = dragEvent.position;
+			bezier.p2 = dragEvent.position;
 		};
 		var setP3 = function(dragEvent) {
-			this.p3 = dragEvent.position;
+			bezier.p3 = dragEvent.position;
 		};
 
-		draggers.push(new PointDragger(getP0, setP0, this.drawStyle));
-		draggers.push(new PointDragger(getP1, setP1, this.drawStyle));
-		draggers.push(new PointDragger(getP2, setP2, this.drawStyle));
-		draggers.push(new PointDragger(getP3, setP3, this.drawStyle));
+		draggers.push(new PointDragger(getP0, setP0, bezier.drawStyle));
+		draggers.push(new PointDragger(getP1, setP1, bezier.drawStyle));
+		draggers.push(new PointDragger(getP2, setP2, bezier.drawStyle));
+		draggers.push(new PointDragger(getP3, setP3, bezier.drawStyle));
 		
-		draggers.push(new ControlPolygon(getP0, getP1, getP2, getP3,  setP0, this.curve.lineStyle));
+		draggers.push(new ControlPolygon(getP0, getP1, getP2, getP3,  setP0, setP1, setP2, setP3, this.curve.lineStyle));
 		
-
-//		// set tickmarks if its set and if we are not at the first or last point
-//		if (this.tickmarks) {
-//			for ( var j = 1; j < this.tArr.length; j++) {
-//
-//				// calculate current point
-//				var t = this.tArr[j];
-//				var x = this.funX(t);
-//				var y = this.funY(t);
-//
-//				// calculate last point
-//				t = this.tArr[j - 1];
-//				var beforeX = this.funX(t);
-//				var beforeY = this.funY(t);
-//
-//				// calculate next point
-//				t = this.tArr[j + 1];
-//				var afterX = this.funX(t);
-//				var afterY = this.funY(t);
-//
-//				// tangente von x = PunktDanach - PunktDavor / n (zum Kürzen)
-//				var tangenteX = (afterX - beforeX) / 8;
-//				var tangenteY = (afterY - beforeY) / 8;
-//
-//				// normale von [x, y] = [-y, x]
-//				var normaleX = -tangenteY;
-//				var normaleY = tangenteX;
-//
-//				// connect two points for the normale: One over and one under the curve
-//				var pointOverCurve = [ x + normaleX, y + normaleY ];
-//				var pointUnderCurve = [ x - normaleX, y - normaleY ];
-//
-//				draggers.push(new Tickmarks(pointOverCurve, pointUnderCurve));
-//			}
-//		}
 		
 		if(this.deCasteljau) {
 			var s = 2/3;

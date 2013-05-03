@@ -21,9 +21,9 @@ define([ "util", "scene" ], (function(Util, Scene) {
 	 * 
 	 */
 
-	var ControlPolygon = function(getP0, getP1, getP2, getP3, setPos, drawStyle) {
+	var ControlPolygon = function(getP0, getP1, getP2, getP3, setPos0, setPos1, setPos2, setPos3, drawStyle) {
 
-		console.log("new ControlPolygon")
+		console.log("new ControlPolygon");
 		
 		// remember the callbacks
 		this.getP0 = getP0;
@@ -31,7 +31,11 @@ define([ "util", "scene" ], (function(Util, Scene) {
 		this.getP2 = getP2;
 		this.getP3 = getP3;
 
-		this.setPos = setPos;
+		this.setPos0 = setPos0;
+		this.setPos1 = setPos1;
+		this.setPos2 = setPos2;
+		this.setPos3 = setPos3;
+		
 		
 		// default draw style
 		this.drawStyle = {
@@ -117,6 +121,7 @@ define([ "util", "scene" ], (function(Util, Scene) {
     
         // change position of the associated original (!) object
         this.setPos(dragEvent);
+//        console.log("setPos: " + this.setPos(dragEvent));
     };
 
 	// this module exposes only the constructor for Dragger objects

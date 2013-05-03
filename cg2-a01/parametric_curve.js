@@ -87,7 +87,7 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 				var line = new StraightLine([ beforeX, beforeY ], [ x, y ], this.lineStyle);
 				line.draw(context);
 				
-				console.log("X = " + this.funX + "drawing Line To: " + x + "/" + y);
+//				console.log("X = " + this.funX + "drawing Line To: " + x + "/" + y);
 				
 				this.lines.push(line);
 
