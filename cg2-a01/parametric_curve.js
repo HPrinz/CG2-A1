@@ -83,12 +83,9 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 				var beforeY = this.funY(t);
 
 				// save as StraightLine for the isHit()-function without drawing the line!
-//				console.log(x, y, beforeX, beforeY);
 				var line = new StraightLine([ beforeX, beforeY ], [ x, y ], this.lineStyle);
 				line.draw(context);
-				
-//				console.log("X = " + this.funX + "drawing Line To: " + x + "/" + y);
-				
+								
 				this.lines.push(line);
 
 				if (this.tickmarks) {
@@ -118,10 +115,8 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 
 						line.draw(context);
 					}
-
 				}
 			}
-
 		}
 
 		context.lineWidth = this.lineStyle.width;
@@ -144,7 +139,6 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 				return true;
 			}
 		}
-
 		return false;
 	};
 
@@ -187,8 +181,6 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 		this.funY = value;
 	};
 
-
 	// this module only exports the constructor for ParametricCurve objects
 	return ParametricCurve;
-
 }));

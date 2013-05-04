@@ -38,7 +38,10 @@
                 New Curve
             </button>
             <button id="btnNewBezier" style="width:100px;" type="button"   >
-                New Beziér
+                New Bézier
+            </button>
+            <button id="btnNewCasteljau" style="width:100px;" type="button"   >
+                New Casteljau
             </button>
             <button id="btnClear" style="width:100px;" type="button" >
                 Clear
@@ -171,12 +174,14 @@
                             <input id="p3y" type="number" style="width:70px;" value="450" >
                             </td>
                         </tr>
-                        <tr>
-                        	<td>De Casteljau</td>
-                        	<td>
-                        	<input id="deCasteljau" type="checkbox">
-                        	</td>
-                        </tr>
+                    </table>
+                    </table> <h3>Casteljau Curve</h3>
+                <form>
+                	 <table border="0">
+                        <colgroup>
+                            <col width="150">
+                            <col width="70">
+                        </colgroup>
                         <tr>
                         	<td>Show Control Polygons</td>
                         	<td>
@@ -199,7 +204,6 @@
                 </form>
               </table>
             </div>
-
             <div style="float:clear;"></div>
 
         </div>

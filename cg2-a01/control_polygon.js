@@ -7,7 +7,7 @@
  */
 
 /* requireJS module definition */
-define([ "util", "scene" , "straight_line" , "point_dragger" ], (function(Util, Scene, StraightLine, PointDragger) {
+define([ "util", "scene" , "straight_line" ], (function(Util, Scene, StraightLine) {
 
 	"use strict";
 

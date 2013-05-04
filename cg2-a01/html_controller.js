@@ -11,7 +11,7 @@
 
 /* requireJS module definition */
 
-define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve"], (function($, StraightLine, Circle, ParametricCurve, BezierCurve) {
+define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve", "casteljau_curve"], (function($, StraightLine, Circle, ParametricCurve, BezierCurve, CasteljauCurve) {
 
 	"use strict";
 
@@ -290,6 +290,12 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			}
 		}));
 
+		$("#segmentsInput").change((function() {
+			var obj = sceneController.getSelectedObject();
+			if (obj instanceof ParametricCurve || obj instanceof BezierCurve){
+				// TODO tickmarks anpassen!
+			}
+		}));
 		
 		$("#btnNewBezier").click((function() {
 			console.log("new Bezier curve");
@@ -300,12 +306,6 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			// if the checkbox is checked, the attribute checked will be "checked" else the attribute will be undefined
 			if ($("#tickMarkBox").attr("checked") == "checked") {				
 				tickmarks = true;			
-			}
-			
-			var deCasteljau = false;			
-			// if the checkbox is checked, the attribute checked will be "checked" else the attribute will be undefined
-			if ($("#deCasteljau").attr("checked") == "checked") {				
-				deCasteljau = true;			
 			}
 			
 			var p0 = [parseInt($("#p0x").val()), parseInt($("#p0y").val())];
@@ -325,6 +325,41 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			scene.addObjects([ bc ]);
 			sceneController.deselect();
 			sceneController.select(bc);
+		}));
+		
+		$("#btnNewCasteljau").click((function() {
+			console.log("new Casteljau curve");
+			
+			var segments = parseInt($("#segmentsInput").attr("value"));
+
+			var tickmarks = false;			
+			// if the checkbox is checked, the attribute checked will be "checked" else the attribute will be undefined
+			if ($("#tickMarkBox").attr("checked") == "checked") {				
+				tickmarks = true;			
+			}
+			
+			var showControlPolygons = false;
+			if ($("#showControlPolygons").attr("checked") == "checked") {				
+				showControlPolygons = true;			
+			}
+			
+			var p0 = [parseInt($("#p0x").val()), parseInt($("#p0y").val())];
+			var p1 = [parseInt($("#p1x").val()), parseInt($("#p1y").val())];
+			var p2 = [parseInt($("#p2x").val()), parseInt($("#p2y").val())];
+			var p3 = [parseInt($("#p3x").val()), parseInt($("#p3y").val())];
+			
+			var style = {
+					width : Math.floor(Math.random() * 20) + 1,
+					color : randomColor()
+			};
+			
+			var t = 2/3;
+			var cc = new CasteljauCurve(p0, p1, p2, p3, t, showControlPolygons, style);
+
+			console.log("Casteljau curve: " + cc);
+			scene.addObjects([ cc ]);
+			sceneController.deselect();
+			sceneController.select(cc);
 		}));
 	};
 

@@ -14,7 +14,7 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 
 	"use strict";
 
-	var BezierCurve = function(minT, maxT, point0, point1, point2, point3, segments, tickmarks, deCasteljau, style) {
+	var BezierCurve = function(minT, maxT, point0, point1, point2, point3, segments, tickmarks, style) {
 
 		// draw style for drawing the line
 		this.lineStyle = style || {
@@ -45,16 +45,10 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 		this.maxT = maxT || Math.PI * 2;
 
 		this.lines = [];
-
 		this.tArr = [];
-		this.deCasteljau = deCasteljau;
 		
 		this.curve = new ParametricCurve(this.funX, this.funY, minT, maxT, segments, tickmarks, style);
 
-	};
-
-	BezierCurve.prototype.setTickmarks = function(tick){
-		this.curve.tickmarks = tick;
 	};
 	
 	/**
@@ -64,16 +58,11 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 		this.curve.draw(context);
 	};
 
+	/**
+	 * Test whether the mouse position is on the ParametricCurve's radius(+/- 10)
+	 */
 	BezierCurve.prototype.isHit = function(context, mousePos) {
-		for ( var i = 0; i < this.curve.lines.length; i++) {
-			var isHit = this.curve.lines[i].isHit(context, mousePos);
-			if (isHit) {
-				console.log("We hit a line!");
-				return true;
-			}
-		}
-
-		return false;
+		this.curve.isHit(context, mousePos);
 	};
 
 	/**
@@ -116,19 +105,6 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 		draggers.push(new PointDragger(getP3, setP3, bezier.drawStyle));
 		
 		draggers.push(new ControlPolygon(getP0, getP1, getP2, getP3, this.curve.lineStyle));
-		
-		
-		if(this.deCasteljau) {
-			var s = 2/3;
-			var a0 = (1 - s) * this.p0 + s * this.p1;
-			var a1 = (1 - s) * this.p1 + s * this.p2;
-			var a2 = (1 - s) * this.p2 + s * this.p3;
-			
-			var b0 = (1 - s) * a0 + s * a1;
-			var b1 = (1 - s) * a1 + s * a2;
-			
-			var c0 = (1 - s) * b0 + s * b1;
-		}
 
 		return draggers;
 	};
@@ -147,6 +123,10 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 	
 	BezierCurve.prototype.setLineWidth = function(widthValue) {
 		this.curve.lineStyle.width = widthValue;
+	};
+	
+	BezierCurve.prototype.setTickmarks = function(tick){
+		this.curve.tickmarks = tick;
 	};
 	
 	return BezierCurve;
