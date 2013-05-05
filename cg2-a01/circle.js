@@ -103,7 +103,6 @@ define(["util", "vec2", "scene", "point_dragger", "radius_dragger"],
         draggers.push( new PointDragger(getCenter, setCenter, draggerStyle) );
 		draggers.push( new RadiusDragger(getRadius, setRadius, draggerStyle) );
         
-		console.log("createDraggers. Radius = " + _circle.radius);
         return draggers;
     };
 	
