@@ -10,7 +10,7 @@
  */
 
 /* requireJS module definition */
-define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon", "point_dragger" , "parametric_curve"], (function(Util, vec2, Scene, StraightLine, Tickmarks,
+define([ "util", "vec2", "scene", "straight_line", "control_polygon", "point_dragger" , "parametric_curve"], (function(Util, vec2, Scene, StraightLine,
 		ControlPolygon, PointDragger, ParametricCurve) {
 
 	"use strict";

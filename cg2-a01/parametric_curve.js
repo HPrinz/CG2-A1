@@ -10,17 +10,20 @@
  */
 
 /* requireJS module definition */
-define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util, vec2, Scene, StraightLine, Tickmarks) {
+define([ "util", "vec2", "scene", "straight_line" ], (function(Util, vec2, Scene, StraightLine) {
 
 	"use strict";
 
 	/**
-	 * A simple ParametricCurve thats radius can be scaled by one point. It can be move by its center point Parameters: -
-	 * center: array object representing [x,y] coordinates of center point - radius: number representing the radius of
-	 * the ParametricCurve - lineStyle: object defining width and color attributes for line drawing, begin of the form {
+	 * A simple ParametricCurve thats radius can be scaled by one point. It can be move by its center point Parameters: 
+	 * 
+	 * - center: array object representing [x,y] coordinates of center point 
+	 * 
+	 * - radius: number representing the radius of the ParametricCurve 
+	 * 
+	 * - lineStyle: object defining width and color attributes for line drawing, begin of the form {
 	 * width: 2, color: "#00FF00" }
 	 */
-
 	var ParametricCurve = function(funX, funY, minT, maxT, segments, tickmarks, style) {
 
 		console.log("Creating ParametricCurve with functions x(t)=" + funX + ", y(t)=" + funY + ", defined in [" + maxT + "|" + minT
@@ -44,24 +47,19 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 		this.tArr = [];
 	};
 	
-
-	ParametricCurve.prototype.setTickmarks = function(tick) {
-		this.tickmarks = tick;
-	};
-
 	/**
-	 * Draw this line into the provided 2D rendering context
+	 * Draw this curve into the provided 2D rendering context - with or without tickmarks
 	 */
 	ParametricCurve.prototype.draw = function(context) {
 
-		// reset
-		this.tArr = [];
-
+		//calculate the length of the straightLines
 		var segmentDistance = Math.abs((this.maxT - this.minT) / this.segments);
 
 		// draw actual line
 		context.beginPath();
 
+		// reset
+		this.tArr = [];
 		// calculating all t's
 		for ( var i = 0; i <= this.segments; i++) {
 			this.tArr.push(this.minT + (i * segmentDistance));
@@ -75,6 +73,7 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 			var x = this.funX(t);
 			var y = this.funY(t);
 
+			// if its not the first segment
 			if (j != 0) {
 
 				// calculate last point
@@ -82,14 +81,15 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 				var beforeX = this.funX(t);
 				var beforeY = this.funY(t);
 
-				// save as StraightLine for the isHit()-function without drawing the line!
 				var line = new StraightLine([ beforeX, beforeY ], [ x, y ], this.lineStyle);
 				line.draw(context);
 								
 				this.lines.push(line);
 
+				//create the tickmarks
 				if (this.tickmarks) {
 
+					// if its not the last segment
 					if (j <= this.tArr.length - 2) {
 						// calculate next point
 						t = this.tArr[j + 1];
@@ -128,24 +128,20 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 	};
 
 	/**
-	 * Test whether the mouse position is on the ParametricCurve's radius(+/- 10)
+	 * Test whether the mouse position is on one of the lines that create the ParametricCurve
 	 */
 	ParametricCurve.prototype.isHit = function(context, mousePos) {
 
 		for ( var i = 0; i < this.lines.length; i++) {
 			var isHit = this.lines[i].isHit(context, mousePos);
 			if (isHit) {
-				console.log("We hit a line!");
 				return true;
 			}
 		}
 		return false;
 	};
 
-	/**
-	 * Return list of draggers to manipulate this line. we have 1 PointDragger and 1 RadiusDragger for each
-	 * ParametricCurve.
-	 */
+	// the parametric curve has no draggers
 	ParametricCurve.prototype.createDraggers = function() {
 		return [];
 	};
@@ -179,6 +175,10 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks" ], (function(Util
 
 	ParametricCurve.prototype.setYInput = function(value) {
 		this.funY = value;
+	};
+	
+	ParametricCurve.prototype.setTickmarks = function(tick) {
+		this.tickmarks = tick;
 	};
 
 	// this module only exports the constructor for ParametricCurve objects

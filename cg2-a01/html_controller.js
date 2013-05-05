@@ -32,7 +32,6 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 				if (obj instanceof Circle) {
 					$("#radius").show();
 					$("#para").hide();
-					$("#bez").hide();
 					$("#curves").hide();
 					$("#casteljau").hide();
 				}
@@ -40,7 +39,6 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 				else if (obj instanceof StraightLine) {
 					$("#radius").hide();
 					$("#para").hide();
-					$("#bez").hide();
 					$("#casteljau").hide();
 					$("#curves").hide();
 				}
@@ -48,7 +46,6 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 				else if (obj instanceof ParametricCurve) {
 					$("#radius").hide();
 					$("#para").show();
-					$("#bez").hide();
 					$("#casteljau").hide();
 					$("#curves").show();
 				}
@@ -56,7 +53,6 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 				else if (obj instanceof BezierCurve) {
 					$("#radius").hide();
 					$("#para").hide();
-					$("#bez").show();
 					$("#casteljau").hide();
 					$("#curves").show();
 				}
@@ -327,7 +323,11 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 		$("#segmentsInput").change((function() {
 			var obj = sceneController.getSelectedObject();
 			if (obj instanceof ParametricCurve || obj instanceof BezierCurve){
-				obj.segments = parseInt($("#segmentsInput").val());
+				if (obj instanceof ParametricCurve){
+					obj.segments = parseInt($("#segmentsInput").val());
+				}else{
+					obj.curve.segments = parseInt($("#segmentsInput").val());
+				}
 				sceneController.deselect();
 				sceneController.select(obj);
 			}
@@ -346,10 +346,10 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 				tickmarks = true;			
 			}
 			
-			var p0 = [parseInt($("#p0x").val()), parseInt($("#p0y").val())];
-			var p1 = [parseInt($("#p1x").val()), parseInt($("#p1y").val())];
-			var p2 = [parseInt($("#p2x").val()), parseInt($("#p2y").val())];
-			var p3 = [parseInt($("#p3x").val()), parseInt($("#p3y").val())];
+			var p0 = [randomX(), randomY()];
+			var p1 = [randomX(), randomY()];
+			var p2 = [randomX(), randomY()];
+			var p3 = [randomX(), randomY()];
 			
 			var style = {
 					width : Math.floor(Math.random() * 20) + 1,

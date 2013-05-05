@@ -169,8 +169,6 @@ define(["util", "scene"],
         // get relative mouse position within canvas
         var pos=util.canvasPosition(event);
         
-        //window.console.log("mouse down at [" + pos[0] + "," + pos[1] + "]");
-        
         // go through all scene elements in front-to-back order
         var objs = this.scene.getObjects("front-to-back");
         for(var i=0; i<objs.length; i+=1) {
@@ -227,8 +225,6 @@ define(["util", "scene"],
             // difference of current and last position
             var deltax = pos[0]-this.dragLastPos[0];
             var deltay = pos[1]-this.dragLastPos[1];
-
-            // window.console.log("mouse drag by [" + deltax + "," + deltay + "]");
         
             // call the object's handler function, if existing
             var dragEvent = {"position": pos, "delta": [deltax,deltay]};
