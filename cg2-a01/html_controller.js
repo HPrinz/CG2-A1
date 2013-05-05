@@ -319,7 +319,7 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			};
 			
 //			var bc = new BezierCurve(minT, maxT, randomPoint, randomPoint, randomPoint, randomPoint, segments, tickmarks, style);
-			var bc = new BezierCurve(0, 1, p0, p1, p2, p3, segments, tickmarks, style);
+			var bc = new BezierCurve(p0, p1, p2, p3, segments, tickmarks, style);
 
 			console.log("Bezier curve: " + bc);
 			scene.addObjects([ bc ]);
