@@ -15,7 +15,7 @@ define([ "util", "scene" , "straight_line" ], (function(Util, Scene, StraightLin
 	 * - p0,p1,p2,p3: 
 	 * the four points of the control polygon. each has a x (p.e. p0[0]) and an y (p.e. p0[1]) coordinate
 	 */
-	var ControlPolygon = function(getP0, getP1, getP2, getP3) {
+	var ControlPolygon = function(getP0, getP1, getP2, getP3, color) {
 		
 		// remember the callbacks
 		this.getP0 = getP0;
@@ -25,9 +25,8 @@ define([ "util", "scene" , "straight_line" ], (function(Util, Scene, StraightLin
 		
 		// default draw style
 		this.drawStyle = {
-			radius : 5,
-			width : 2,
-			color : "#ff0000",
+			width : 1,
+			color : color,
 			fill : false
 		};
 

@@ -55,14 +55,12 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 
 		this.segments = segments || 5;
 		this.tickmarks = tickmarks;
-		this.minT = 0;
-		this.maxT = 1;
 
 		this.lines = [];
 		this.tArr = [];
 		
 		//the curve that we will delegate to for other functions (avoid dublicate Code)
-		this.curve = new ParametricCurve(this.funX, this.funY, minT, maxT, segments, tickmarks, style);
+		this.curve = new ParametricCurve(this.funX, this.funY, 0, 1, segments, tickmarks, style);
 
 	};
 	
@@ -79,7 +77,7 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 	 */
 	BezierCurve.prototype.isHit = function(context, mousePos) {
 		//delegating to parametric curve
-		this.curve.isHit(context, mousePos);
+		return this.curve.isHit(context, mousePos);
 	};
 
 	/**
@@ -116,13 +114,20 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 		var setP3 = function(dragEvent) {
 			bezier.p3 = dragEvent.position;
 		};
-
-		draggers.push(new PointDragger(getP0, setP0, bezier.drawStyle));
-		draggers.push(new PointDragger(getP1, setP1, bezier.drawStyle));
-		draggers.push(new PointDragger(getP2, setP2, bezier.drawStyle));
-		draggers.push(new PointDragger(getP3, setP3, bezier.drawStyle));
 		
-		draggers.push(new ControlPolygon(getP0, getP1, getP2, getP3));
+		var style = { 
+            radius:4, 
+            width:2, 
+            color: bezier.lineStyle.color, 
+            fill: false 
+        };
+
+		draggers.push(new PointDragger(getP0, setP0, style));
+		draggers.push(new PointDragger(getP1, setP1, style));
+		draggers.push(new PointDragger(getP2, setP2, style));
+		draggers.push(new PointDragger(getP3, setP3, style));
+		
+		draggers.push(new ControlPolygon(getP0, getP1, getP2, getP3, bezier.lineStyle.color));
 
 		return draggers;
 	};

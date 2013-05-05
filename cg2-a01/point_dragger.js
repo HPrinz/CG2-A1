@@ -51,13 +51,12 @@ define(["util", "scene"],
         this.drawStyle = drawStyle || { 
             radius:5, 
             width:2, 
-            color: "#ff0000", 
+            color: 0xff0000, 
             fill: false 
         };
         
         // attribute queried by SceneController to recognize draggers
-        this.isDragger = true; 
-                                        
+        this.isDragger = true;              
     };
 
     /*

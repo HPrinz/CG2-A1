@@ -11,7 +11,7 @@
 
 /* requireJS module definition */
 
-define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve", "casteljau_curve"], (function($, StraightLine, Circle, ParametricCurve, BezierCurve, CasteljauCurve) {
+define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve"], (function($, StraightLine, Circle, ParametricCurve, BezierCurve) {
 
 	"use strict";
 
@@ -136,7 +136,6 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 
 			// set current radius into the input field
 			$("#radiusInput").attr("value", circle.getRadius());
-			console.log("The radius of the current circle is: " + $("#radiusInput").attr("value") + ".");
 
 			// deselect all objects, then select the newly created object
 			sceneController.deselect();
@@ -147,10 +146,8 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 		 * event handler for color-Change.
 		 */
 		$("#colorInput").change((function() {
-			console.log("color should change");
 			var obj = sceneController.getSelectedObject();
 			if (obj instanceof Circle || obj instanceof StraightLine|| obj instanceof ParametricCurve || obj instanceof BezierCurve) {
-				console.log("Farbe ist " + $("#colorInput").attr("value"));
 				obj.setLineColor($("#colorInput").attr("value"));
 				sceneController.deselect();
 				sceneController.select(obj); // this will also redraw
@@ -173,7 +170,6 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 		 * event handler for Radius-Change.
 		 */
 		$("#radiusInput").change((function() {
-			console.log("radius should change");
 
 			var obj = sceneController.getSelectedObject();
 			if (obj instanceof Circle) {
@@ -189,8 +185,6 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 		 * event handler for Clear-Button.
 		 */
 		$("#btnClear").click((function() {
-			console.log("radius should change");
-
 			scene.clear();
 			sceneController.deselect();
 			
@@ -200,7 +194,6 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 		 * event handler for New Curve-Button.
 		 */
 		$("#btnNewCurve").click((function() {
-			console.log("new Parametric curve");
 
 			var style = {
 				width : Math.floor(Math.random() * 20) + 1,
@@ -238,6 +231,9 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			sceneController.select(pc);
 		}));
 		
+		/**
+		 * event handler for Tickmarks-Box
+		 */
 		$("#tickMarkBox").change((function() {
 			var obj = sceneController.getSelectedObject();
 			if (obj instanceof ParametricCurve || obj instanceof BezierCurve) {
@@ -253,7 +249,9 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			}
 		}));
 		
-		
+		/**
+		 * event handler for x-Function-Field of the parametric curve 
+		 */
 		$("#xInput").change((function() {
 			var obj = sceneController.getSelectedObject();
 			if (obj instanceof ParametricCurve){
@@ -263,6 +261,9 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			}
 		}));
 
+		/**
+		 * event handler for y-Function-Field of the parametric curve
+		 */
 		$("#yInput").change((function() {
 			var obj = sceneController.getSelectedObject();
 			if (obj instanceof ParametricCurve){
@@ -272,33 +273,46 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 			}
 		}));
 		
+		/**
+		 * event handler for min t-Field of the parametric curve
+		 */
 		$("#minTInput").change((function() {
 			var obj = sceneController.getSelectedObject();
 			if (obj instanceof ParametricCurve){
-				obj.minT = ($("#minTInput").val());
+				obj.minT = parseInt($("#minTInput").val());
 				sceneController.deselect();
 				sceneController.select(obj);
 			}
 		}));
 		
+		/**
+		 * event handler for max t-Field of the parametric curve
+		 */
 		$("#maxTInput").change((function() {
 			var obj = sceneController.getSelectedObject();
 			if (obj instanceof ParametricCurve){
-				obj.maxT = ($("#maxTInput").val());
+				obj.maxT = parseInt($("#maxTInput").val());
 				sceneController.deselect();
 				sceneController.select(obj);
 			}
 		}));
 
+		/**
+		 * event handler for max t-Field of the parametric curve
+		 */
 		$("#segmentsInput").change((function() {
 			var obj = sceneController.getSelectedObject();
 			if (obj instanceof ParametricCurve || obj instanceof BezierCurve){
-				// TODO tickmarks anpassen!
+				obj.segments = parseInt($("#segmentsInput").val());
+				sceneController.deselect();
+				sceneController.select(obj);
 			}
 		}));
 		
+		/**
+		 * event handler for new Bezier Curve-Button
+		 */
 		$("#btnNewBezier").click((function() {
-			console.log("new Bezier curve");
 			
 			var segments = parseInt($("#segmentsInput").attr("value"));
 
@@ -317,18 +331,17 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 					width : Math.floor(Math.random() * 20) + 1,
 					color : randomColor()
 			};
-			
-//			var bc = new BezierCurve(minT, maxT, randomPoint, randomPoint, randomPoint, randomPoint, segments, tickmarks, style);
-			var bc = new BezierCurve(p0, p1, p2, p3, segments, tickmarks, style);
 
-			console.log("Bezier curve: " + bc);
+			var bc = new BezierCurve(p0, p1, p2, p3, segments, tickmarks, style);
 			scene.addObjects([ bc ]);
 			sceneController.deselect();
 			sceneController.select(bc);
 		}));
 		
+		/**
+		 * event handler for new Casteljau Curve-Button
+		 */
 		$("#btnNewCasteljau").click((function() {
-			console.log("new Casteljau curve");
 			
 			var segments = parseInt($("#segmentsInput").attr("value"));
 
