@@ -6,6 +6,7 @@
  *
  * This represents a BezierCurve that consists of 4 control points and a style. 
  * These 4 points can be used as draggers to manipulate the curve.
+ * A Control Polygon is shown around the curve.
  */
 
 /* requireJS module definition */
@@ -14,7 +15,18 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 
 	"use strict";
 
-	var BezierCurve = function(minT, maxT, point0, point1, point2, point3, segments, tickmarks, style) {
+	/**
+	 * - p0,p1,p2,p3: 
+	 * the four points influencing the form of the bezier curve. Each has a x (p.e. p0[0]) and an y (p.e. p0[1]) coordinate.
+	 * p0 is the curve's starting point, p3 is the curve's end point
+	 * 
+	 * - segements: the number of segments that define how "round" the curve will be
+	 * 
+	 * - tickmarks: wether to show the tickmarks between the segments
+	 * 
+	 * - style: the curve's style
+	 */
+	var BezierCurve = function(p0, p1, p2, p3, segments, tickmarks, style) {
 
 		// draw style for drawing the line
 		this.lineStyle = style || {
@@ -23,31 +35,32 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 		};
 
 		// initial values in case either point is undefined
-		this.p0 = point0 || [ 100, 100 ];
-		this.p1 = point1 || [ 200, 100 ];
-		this.p2 = point2 || [ 50, 300 ];
-		this.p3 = point3 || [ 300, 100 ];
+		this.p0 = p0 || [ 100, 100 ];
+		this.p1 = p1 || [ 200, 100 ];
+		this.p2 = p2 || [ 50, 300 ];
+		this.p3 = p3 || [ 300, 100 ];
 
-		var bezier = this;
+		// for closure
+		var _bezier = this;
 		
+		// setting the functions to reuse the algorithms of the prametric curve
 		this.funX = function(t) {
-			return (Math.pow((1 - t), 3) * bezier.p0[0]) + (3 * Math.pow((1 - t), 2) * t * bezier.p1[0])
-					+ (3 * (1 - t) * Math.pow(t, 2) * bezier.p2[0]) + (Math.pow(t, 3) * bezier.p3[0]);
+			return (Math.pow((1 - t), 3) * _bezier.p0[0]) + (3 * Math.pow((1 - t), 2) * t * _bezier.p1[0])
+					+ (3 * (1 - t) * Math.pow(t, 2) * _bezier.p2[0]) + (Math.pow(t, 3) * _bezier.p3[0]);
 		};
 		this.funY = function(t) {
-			return (Math.pow((1 - t), 3) * bezier.p0[1]) + (3 * Math.pow((1 - t), 2) * t * bezier.p1[1])
-					+ (3 * (1 - t) * Math.pow(t, 2) * bezier.p2[1]) + (Math.pow(t, 3) * bezier.p3[1]);
+			return (Math.pow((1 - t), 3) * _bezier.p0[1]) + (3 * Math.pow((1 - t), 2) * t * _bezier.p1[1])
+					+ (3 * (1 - t) * Math.pow(t, 2) * _bezier.p2[1]) + (Math.pow(t, 3) * _bezier.p3[1]);
 		};
 
 		this.segments = segments || 5;
 		this.tickmarks = tickmarks;
-		this.minT = minT || 0;
-		this.maxT = maxT || Math.PI * 2;
 
 		this.lines = [];
 		this.tArr = [];
 		
-		this.curve = new ParametricCurve(this.funX, this.funY, minT, maxT, segments, tickmarks, style);
+		//the curve that we will delegate to for other functions (avoid dublicate Code)
+		this.curve = new ParametricCurve(this.funX, this.funY, 0, 1, segments, tickmarks, style);
 
 	};
 	
@@ -55,23 +68,26 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 	 * Draw this curve into the provided 2D rendering context
 	 */
 	BezierCurve.prototype.draw = function(context) {
+		//delegating to parametric curve
 		this.curve.draw(context);
 	};
 
 	/**
-	 * Test whether the mouse position is on the ParametricCurve's radius(+/- 10)
+	 * Test whether the mouse position is on the Bezier
 	 */
 	BezierCurve.prototype.isHit = function(context, mousePos) {
-		this.curve.isHit(context, mousePos);
+		//delegating to parametric curve
+		return this.curve.isHit(context, mousePos);
 	};
 
 	/**
-	 * Return list of draggers to manipulate this line. we have 4 PointDragger, 1 ControlPolygon and Tickmarks for each bézier curve.
+	 * Return list of draggers to manipulate this curve. we have 4 PointDragger and 1 ControlPolygon for each Bezier curve.
      */
 	BezierCurve.prototype.createDraggers = function() {
 		
 		var draggers = [];
 		
+		//closure
 		var bezier = this;
 		
 		var getP0 = function() {
@@ -98,13 +114,20 @@ define([ "util", "vec2", "scene", "straight_line", "tickmarks", "control_polygon
 		var setP3 = function(dragEvent) {
 			bezier.p3 = dragEvent.position;
 		};
-
-		draggers.push(new PointDragger(getP0, setP0, bezier.drawStyle));
-		draggers.push(new PointDragger(getP1, setP1, bezier.drawStyle));
-		draggers.push(new PointDragger(getP2, setP2, bezier.drawStyle));
-		draggers.push(new PointDragger(getP3, setP3, bezier.drawStyle));
 		
-		draggers.push(new ControlPolygon(getP0, getP1, getP2, getP3, this.curve.lineStyle));
+		var style = { 
+            radius:4, 
+            width:2, 
+            color: bezier.lineStyle.color, 
+            fill: false 
+        };
+
+		draggers.push(new PointDragger(getP0, setP0, style));
+		draggers.push(new PointDragger(getP1, setP1, style));
+		draggers.push(new PointDragger(getP2, setP2, style));
+		draggers.push(new PointDragger(getP3, setP3, style));
+		
+		draggers.push(new ControlPolygon(getP0, getP1, getP2, getP3, bezier.lineStyle.color));
 
 		return draggers;
 	};
