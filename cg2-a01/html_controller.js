@@ -380,10 +380,10 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 				showControlPolygons = true;			
 			}
 			
-			var p0 = [parseInt($("#p0x").val()), parseInt($("#p0y").val())];
-			var p1 = [parseInt($("#p1x").val()), parseInt($("#p1y").val())];
-			var p2 = [parseInt($("#p2x").val()), parseInt($("#p2y").val())];
-			var p3 = [parseInt($("#p3x").val()), parseInt($("#p3y").val())];
+			var p0 = [randomX(), randomY()];
+			var p1 = [randomX(), randomY()];
+			var p2 = [randomX(), randomY()];
+			var p3 = [randomX(), randomY()];
 			
 			var style = {
 					width : Math.floor(Math.random() * 20) + 1,
