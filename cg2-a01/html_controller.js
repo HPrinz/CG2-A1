@@ -11,7 +11,7 @@
 
 /* requireJS module definition */
 
-define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve"], (function($, StraightLine, Circle, ParametricCurve, BezierCurve) {
+define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve", "casteljau_curve"], (function($, StraightLine, Circle, ParametricCurve, BezierCurve, CasteljauCurve) {
 
 	"use strict";
 
@@ -29,13 +29,37 @@ define([ "jquery", "straight_line", "circle", "parametric_curve" , "bezier_curve
 		var selectionHandler = function() {
 			changeHandler();
 			var obj = sceneController.getSelectedObject();
-			if (obj instanceof Circle || obj instanceof StraightLine || obj.lines[0] instanceof StraightLine) {
 				if (obj instanceof Circle) {
-					$("#radiusInput").show();
-				} else{
-					$("#radiusInput").hide();
+					$("#radius").show();
+					$("#para").hide();
+					$("#bez").hide();
+					$("#curves").hide();
+					$("#casteljau").hide();
 				}
-			}
+				
+				else if (obj instanceof StraightLine) {
+					$("#radius").hide();
+					$("#para").hide();
+					$("#bez").hide();
+					$("#casteljau").hide();
+					$("#curves").hide();
+				}
+				
+				else if (obj instanceof ParametricCurve) {
+					$("#radius").hide();
+					$("#para").show();
+					$("#bez").hide();
+					$("#casteljau").hide();
+					$("#curves").show();
+				}
+				
+				else if (obj instanceof BezierCurve) {
+					$("#radius").hide();
+					$("#para").hide();
+					$("#bez").show();
+					$("#casteljau").hide();
+					$("#curves").show();
+				}
 		};
 
 		sceneController.onSelection(selectionHandler);
